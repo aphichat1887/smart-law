@@ -1,0 +1,90 @@
+.toolbar {
+  background: #0d2b52;
+  color: white;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.container {
+  background: radial-gradient(circle at top, #0b3c6f, #061a33);
+  height: calc(100vh - 64px);
+  padding: 20px;
+}
+
+.chat-box {
+  background: #2e3f55;
+  color: white;
+  height: 65vh;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 15px;
+}
+
+.intro {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.input-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.input-field {
+  flex: 1;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+// ----- ช่อง input: เปลี่ยนเป็นสีขาวล้วน -----
+::ng-deep .input-field .mat-mdc-text-field-wrapper {
+  background: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+::ng-deep .input-field .mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}
+
+// ตัวอักษรที่พิมพ์ต้องเป็นสีเข้ม เพราะพื้นหลังเปลี่ยนเป็นขาวแล้ว
+input {
+  color: #1a1a1a !important;
+}
+
+::ng-deep .input-field input::placeholder {
+  color: #6b7280 !important;
+  opacity: 1;
+}
+
+// แก้สีฟ้าล้นจาก Chrome autofill ให้เข้ากับพื้นขาว
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  box-shadow: 0 0 0 1000px #ffffff inset !important;
+  -webkit-text-fill-color: #1a1a1a !important;
+  caret-color: #1a1a1a;
+  transition: background-color 600000s 0s, color 600000s 0s;
+}
+
+// ----- Chip อ้างอิงมาตรา: เดิมมองไม่เห็นเพราะสีเทาจางบนพื้นเข้ม -----
+::ng-deep .sources mat-chip-option {
+  background: #3b5a82 !important;
+  border: 1px solid #6f9bd1 !important;
+  border-radius: 16px !important;
+}
+
+::ng-deep .sources mat-chip-option .mdc-evolution-chip__text-label {
+  color: #ffffff !important;
+  font-weight: 500;
+}

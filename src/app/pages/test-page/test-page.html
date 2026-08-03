@@ -1,0 +1,56 @@
+<mat-toolbar class="toolbar">
+    <span class="brand">
+        <mat-icon>balance</mat-icon>
+        Smart Law
+    </span>
+
+    <span class="spacer"></span>
+
+    <button mat-icon-button>
+        <mat-icon>home</mat-icon>
+    </button>
+
+    <button mat-icon-button>
+        <mat-icon>menu</mat-icon>
+    </button>
+</mat-toolbar>
+
+<div class="page">
+    <mat-card class="test-card">
+        <h2 class="title">ทดสอบระบบ</h2>
+        <p class="subtitle">อัปโหลดไฟล์ทดสอบ</p>
+
+        <!-- file -->
+        <div class="file-item">
+            <span class="file-name">ทดสอบ.xls</span>
+
+            <div class="actions">
+                <button mat-mini-fab color="accent">
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-mini-fab color="warn">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+        </div>
+
+        <!-- upload -->
+        <div class="upload-area">
+            <button mat-raised-button color="primary">
+                <mat-icon>upload</mat-icon>
+                Upload
+            </button>
+        </div>
+
+        <!-- result -->
+        <div class="result">
+            ค่า Precision ที่ได้ 0.93 หรือ 93%
+        </div>
+
+        <div class="action-bottom">
+            <button mat-raised-button color="primary">
+                ผลการทดสอบ
+            </button>
+        </div>
+    </mat-card>
+</div>

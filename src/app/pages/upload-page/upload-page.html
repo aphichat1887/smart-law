@@ -1,0 +1,43 @@
+<mat-toolbar class="toolbar">
+    <span class="brand">
+        <mat-icon>balance</mat-icon>
+        Smart Law
+    </span>
+
+    <span class="spacer"></span>
+
+    <button mat-icon-button>
+        <mat-icon>home</mat-icon>
+    </button>
+
+    <button mat-icon-button>
+        <mat-icon>menu</mat-icon>
+    </button>
+</mat-toolbar>
+
+<div class="page">
+    <mat-card class="file-card">
+        <h2 class="title">File List</h2>
+
+        <!-- file item -->
+        <div class="file-item" *ngFor="let file of files">
+            <span class="file-name">{{ file }}</span>
+
+            <div class="actions">
+                <button mat-mini-fab color="warn">
+                    <mat-icon>delete</mat-icon>
+                </button>
+                <button mat-mini-fab color="accent">
+                    <mat-icon>edit</mat-icon>
+                </button>
+            </div>
+        </div>
+
+        <div class="upload-area">
+            <button mat-raised-button color="primary">
+                <mat-icon>upload</mat-icon>
+                Upload
+            </button>
+        </div>
+    </mat-card>
+</div>

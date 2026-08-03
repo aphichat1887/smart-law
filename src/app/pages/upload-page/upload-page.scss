@@ -1,0 +1,76 @@
+/* toolbar */
+.toolbar {
+  background: linear-gradient(90deg, #0d2b52, #133c73);
+  color: white;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.spacer {
+  flex: 1;
+}
+
+/* page background */
+.page {
+  height: calc(100vh - 64px);
+  background: radial-gradient(circle at top, #0b3c6f, #061a33);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* card */
+.file-card {
+  width: 70%;
+  max-width: 800px;
+  min-height: 420px;
+  background: #2f3f55;
+  border-radius: 18px;
+  padding: 25px;
+  color: white;
+}
+
+/* title */
+.title {
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+/* file item */
+.file-item {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 10px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.file-name {
+  font-size: 14px;
+}
+
+/* actions */
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* upload */
+.upload-area {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+}
+
+.upload-area button {
+  border-radius: 12px;
+  padding: 8px 28px;
+  font-size: 15px;
+}

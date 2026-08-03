@@ -1,0 +1,60 @@
+<mat-toolbar color="primary" class="toolbar">
+    <span class="brand">
+        <mat-icon>balance</mat-icon>
+        Smart Law
+    </span>
+    <span class="spacer"></span>
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item *ngIf="!isLoggedIn" (click)="goToLogin()">
+            <mat-icon>admin_panel_settings</mat-icon>
+            <span>Login for admin</span>
+        </button>
+        <button mat-menu-item *ngIf="isLoggedIn" (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Logout</span>
+        </button>
+    </mat-menu>
+</mat-toolbar>
+
+<div class="container">
+    <mat-card class="chat-box">
+        <p class="intro" *ngIf="!answer && !loading">
+            ยินดีต้อนรับสู่ Smart Law ระบบผู้ช่วยทางกฎหมายอัจฉริยะ
+        </p>
+
+        <div *ngIf="loading" class="loading">
+            <mat-spinner diameter="28"></mat-spinner>
+            <span>กำลังค้นหาคำตอบ...</span>
+        </div>
+
+        <div *ngIf="answer && !loading" class="answer-box">
+            <h3>คำตอบ</h3>
+            <p class="answer-text">{{ answer }}</p>
+
+            <div *ngIf="sources.length" class="sources">
+                <h4>อ้างอิง</h4>
+                <mat-chip-listbox>
+                    <mat-chip-option *ngFor="let s of sources" [selectable]="false">
+                        มาตรา {{ s.article }}
+                    </mat-chip-option>
+                </mat-chip-listbox>
+            </div>
+        </div>
+
+        <p *ngIf="error" class="error-text">{{ error }}</p>
+    </mat-card>
+
+    <div class="input-area">
+        <mat-form-field appearance="outline" class="input-field">
+            <input matInput placeholder="พิมพ์คำถามทางกฎหมายที่นี่" [(ngModel)]="question" (keyup.enter)="ask()"
+                [disabled]="loading" />
+        </mat-form-field>
+
+        <button mat-fab color="primary" (click)="ask()" [disabled]="loading">
+            <mat-icon>send</mat-icon>
+        </button>
+    </div>
+</div>

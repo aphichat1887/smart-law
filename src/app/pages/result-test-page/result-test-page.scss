@@ -1,0 +1,86 @@
+/* toolbar */
+.toolbar {
+  background: linear-gradient(90deg, #0d2b52, #133c73);
+  color: white;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.spacer {
+  flex: 1;
+}
+
+/* page */
+.page {
+  height: calc(100vh - 64px);
+  background: radial-gradient(circle at top, #0b3c6f, #061a33);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* card */
+.result-card {
+  width: 80%;
+  max-width: 950px;
+  background: #2f3f55;
+  border-radius: 18px;
+  padding: 30px;
+  color: white;
+}
+
+/* title */
+.title {
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.subtitle {
+  font-size: 14px;
+  opacity: 0.85;
+  margin-bottom: 20px;
+}
+
+/* table */
+.table-wrapper {
+  background: white;
+  border-radius: 12px;
+  padding: 15px;
+  overflow-x: auto;
+}
+
+.result-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #333;
+  font-size: 13px;
+}
+
+.result-table th,
+.result-table td {
+  border: 1px solid #999;
+  padding: 8px;
+  text-align: center;
+}
+
+.result-table th {
+  background: #cfcfcf;
+  font-weight: 500;
+}
+
+/* bottom action */
+.action-bottom {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+}
+
+.action-bottom button {
+  border-radius: 12px;
+  padding: 8px 30px;
+}
