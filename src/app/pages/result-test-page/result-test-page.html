@@ -6,13 +6,41 @@
 
     <span class="spacer"></span>
 
-    <button mat-icon-button>
+    <button mat-icon-button matTooltip="หน้าหลัก" (click)="goHome()">
         <mat-icon>home</mat-icon>
     </button>
 
-    <button mat-icon-button>
+
+    <!-- เมนู -->
+    <button mat-icon-button [matMenuTriggerFor]="menu">
         <mat-icon>menu</mat-icon>
     </button>
+
+    <mat-menu #menu="matMenu">
+
+        <!-- ยังไม่ได้ Login -->
+        <button mat-menu-item *ngIf="!isLoggedIn" (click)="goToLogin()">
+            <mat-icon>admin_panel_settings</mat-icon>
+            <span>Login for admin</span>
+        </button>
+
+        <!-- Login แล้ว -->
+        <button mat-menu-item *ngIf="isLoggedIn" (click)="goToUpload()">
+            <mat-icon>upload_file</mat-icon>
+            <span>อัปโหลดเอกสาร</span>
+        </button>
+
+        <button mat-menu-item *ngIf="isLoggedIn" (click)="goToTest()">
+            <mat-icon>quiz</mat-icon>
+            <span>ทดสอบ</span>
+        </button>
+
+        <button mat-menu-item *ngIf="isLoggedIn" (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Logout</span>
+        </button>
+
+    </mat-menu>
 </mat-toolbar>
 
 <div class="page">
@@ -39,10 +67,10 @@
             </table>
         </div>
 
-        <div class="action-bottom">
+        <!-- <div class="action-bottom">
             <button mat-raised-button color="primary">
-                ย้อนกลับ
+                กลับบ้าน
             </button>
-        </div>
+        </div> -->
     </mat-card>
 </div>

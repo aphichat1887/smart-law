@@ -8,14 +8,29 @@
         <mat-icon>menu</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
+
+        <!-- ยังไม่ได้ Login -->
         <button mat-menu-item *ngIf="!isLoggedIn" (click)="goToLogin()">
             <mat-icon>admin_panel_settings</mat-icon>
             <span>Login for admin</span>
         </button>
+
+        <!-- Login แล้ว -->
+        <button mat-menu-item *ngIf="isLoggedIn" (click)="goToUpload()">
+            <mat-icon>upload_file</mat-icon>
+            <span>อัปโหลดเอกสาร</span>
+        </button>
+
+        <button mat-menu-item *ngIf="isLoggedIn" (click)="goToTest()">
+            <mat-icon>quiz</mat-icon>
+            <span>ทดสอบ</span>
+        </button>
+
         <button mat-menu-item *ngIf="isLoggedIn" (click)="logout()">
             <mat-icon>logout</mat-icon>
             <span>Logout</span>
         </button>
+
     </mat-menu>
 </mat-toolbar>
 
@@ -36,11 +51,20 @@
 
             <div *ngIf="sources.length" class="sources">
                 <h4>อ้างอิง</h4>
-                <mat-chip-listbox>
-                    <mat-chip-option *ngFor="let s of sources" [selectable]="false">
-                        มาตรา {{ s.article }}
-                    </mat-chip-option>
-                </mat-chip-listbox>
+                <div class="sources" *ngIf="sources.length">
+                    <h4>
+                        <mat-icon>gavel</mat-icon>
+                        บทกฎหมายที่อ้างอิง
+                    </h4>
+
+                    <div class="source-tags">
+                        <div class="source-tag" *ngFor="let s of sources">
+                            <span class="article-number">
+                                มาตรา {{ s.article }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 

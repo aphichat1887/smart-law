@@ -48,7 +48,7 @@ export class Main implements OnInit {
   constructor(
     private searchService: SearchService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.isLoggedIn = localStorage.getItem('isAdminLoggedIn') === 'true';
@@ -56,6 +56,14 @@ export class Main implements OnInit {
 
   goToLogin(): void {
     this.router.navigate(['/admin/login']);
+  }
+
+  goToUpload(): void {
+    this.router.navigate(['/upload']);
+  }
+
+  goToTest(): void {
+    this.router.navigate(['/test']);
   }
 
   logout(): void {

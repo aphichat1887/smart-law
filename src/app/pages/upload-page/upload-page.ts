@@ -1,21 +1,74 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-upload-page',
-  imports: [ CommonModule,MatToolbarModule, MatButtonModule, MatIconModule, MatCardModule, MatInputModule, FormsModule ],
+  imports: [
+    CommonModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule,
+    MatInputModule,
+    FormsModule,
+    MatTooltipModule,
+    MatMenuModule
+  ],
   templateUrl: './upload-page.html',
   styleUrl: './upload-page.scss',
 })
-export class UploadPage {
+export class UploadPage implements OnInit {
+
+  isLoggedIn = false;
+
+  constructor(private router: Router) { }
+  ngOnInit(): void {
+
+    this.isLoggedIn =
+      localStorage.getItem('isAdminLoggedIn') === 'true';
+
+  }
   files = [
     'แพ่งและพาณิชย์.pdf',
     'แพ่งและพาณิชย์(ฉบับปรับปรุง).pdf',
   ];
+
+  // กลับหน้าหลัก
+  goHome(): void {
+    this.router.navigate(['/']);
+  }
+
+  // ไปหน้า Login
+  goToLogin(): void {
+    this.router.navigate(['/admin/login']);
+  }
+
+  // ไปหน้า Upload
+  goToUpload(): void {
+    this.router.navigate(['/upload']);
+  }
+
+  // ไปหน้าทดสอบ
+  goToTest(): void {
+    this.router.navigate(['/test']);
+  }
+
+  // Logout
+  logout(): void {
+
+    localStorage.removeItem('isAdminLoggedIn');
+
+    this.isLoggedIn = false;
+
+    this.router.navigate(['/']);
+  }
 }
