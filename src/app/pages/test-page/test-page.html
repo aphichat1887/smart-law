@@ -10,14 +10,12 @@
         <mat-icon>home</mat-icon>
     </button>
 
-
     <!-- เมนู -->
     <button mat-icon-button [matMenuTriggerFor]="menu">
         <mat-icon>menu</mat-icon>
     </button>
 
     <mat-menu #menu="matMenu">
-
         <!-- ยังไม่ได้ Login -->
         <button mat-menu-item *ngIf="!isLoggedIn" (click)="goToLogin()">
             <mat-icon>admin_panel_settings</mat-icon>
@@ -39,43 +37,40 @@
             <mat-icon>logout</mat-icon>
             <span>Logout</span>
         </button>
-
     </mat-menu>
 </mat-toolbar>
 
 <div class="page">
     <mat-card class="test-card">
         <h2 class="title">ทดสอบระบบ</h2>
-        <p class="subtitle">อัปโหลดไฟล์ทดสอบ</p>
+        <p class="subtitle">
+            อัปโหลดไฟล์ทดสอบ (.xlsx ต้องมีคอลัมน์ question และ article)
+        </p>
 
-        <!-- file -->
-        <div class="file-item">
-            <span class="file-name">ทดสอบ.xls</span>
-
-            <div class="actions">
-                <button mat-mini-fab color="accent">
-                    <mat-icon>edit</mat-icon>
-                </button>
-                <button mat-mini-fab color="warn">
-                    <mat-icon>delete</mat-icon>
-                </button>
-            </div>
+        <!-- ไฟล์ที่เลือกล่าสุด -->
+        <div class="file-item" *ngIf="selectedFileName">
+            <span class="file-name">{{ selectedFileName }}</span>
         </div>
+
+        <!-- ช่องเลือกไฟล์ที่ซ่อนไว้ -->
+        <input #fileInput type="file" accept=".xlsx,.xls" hidden (change)="onFileSelected($event)" />
 
         <!-- upload -->
         <div class="upload-area">
-            <button mat-raised-button color="primary">
-                <mat-icon>upload</mat-icon>
-                Upload
+            <button mat-raised-button color="primary" [disabled]="evaluating" (click)="openFilePicker()">
+                <mat-spinner *ngIf="evaluating" diameter="20" class="btn-spinner"></mat-spinner>
+                <mat-icon *ngIf="!evaluating">upload</mat-icon>
+                <span *ngIf="!evaluating">Upload</span>
+                <span *ngIf="evaluating">กำลังทดสอบ...</span>
             </button>
         </div>
 
         <!-- result -->
-        <div class="result">
-            ค่า Precision ที่ได้ 0.93 หรือ 93%
+        <div class="result" *ngIf="hasResult && precisionText">
+            ค่า Precision@K ที่ได้ {{ precisionText }}
         </div>
 
-        <div class="action-bottom">
+        <div class="action-bottom" *ngIf="hasResult">
             <button mat-raised-button color="primary" (click)="goToResult()">
                 <mat-icon>assessment</mat-icon>
                 ผลการทดสอบ

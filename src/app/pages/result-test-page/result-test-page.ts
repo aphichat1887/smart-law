@@ -6,9 +6,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatChipsModule } from '@angular/material/chips';
 import { FormsModule } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
+import { EvaluationService, EvaluateRow } from '../../services/evaluation.service';
 
 @Component({
   selector: 'app-result-test-page',
@@ -21,26 +23,42 @@ import { Router } from '@angular/router';
     MatInputModule,
     FormsModule,
     MatTooltipModule,
-    MatMenuModule
+    MatMenuModule,
+    MatChipsModule,
   ],
   templateUrl: './result-test-page.html',
   styleUrl: './result-test-page.scss',
 })
 export class ResultTestPage implements OnInit {
   isLoggedIn = false;
-  constructor(private router: Router) { }
+
+  k = 3;
+  total = 0;
+  correctCount = 0;
+  precisionText = '';
+  results: EvaluateRow[] = [];
+  hasResult = false;
+
+  constructor(
+    private router: Router,
+    private evaluationService: EvaluationService
+  ) {}
+
   ngOnInit(): void {
+    this.isLoggedIn = localStorage.getItem('isAdminLoggedIn') === 'true';
 
-    this.isLoggedIn =
-      localStorage.getItem('isAdminLoggedIn') === 'true';
-
+    const last = this.evaluationService.lastResult;
+    if (last) {
+      this.hasResult = true;
+      this.k = last.k;
+      this.total = last.total;
+      this.correctCount = last.correct_count;
+      this.precisionText = `${last.precision_at_k.toFixed(2)} หรือ ${(
+        last.precision_at_k * 100
+      ).toFixed(0)}%`;
+      this.results = last.results;
+    }
   }
-  results = [
-    { text: 'ข้อความที่ 1', actual: 'ถูกต้อง', predicted: 'ถูกต้อง' },
-    { text: 'ข้อความที่ 2', actual: 'ไม่ถูกต้อง', predicted: 'ถูกต้อง' },
-    { text: 'ข้อความที่ 3', actual: 'ถูกต้อง', predicted: 'ถูกต้อง' },
-    { text: 'ข้อความที่ 4', actual: 'ถูกต้อง', predicted: 'ไม่ถูกต้อง' },
-  ];
 
   // กลับหน้าหลัก
   goHome(): void {
@@ -68,11 +86,8 @@ export class ResultTestPage implements OnInit {
 
   // Logout
   logout(): void {
-
     localStorage.removeItem('isAdminLoggedIn');
-
     this.isLoggedIn = false;
-
     this.router.navigate(['/']);
   }
 }

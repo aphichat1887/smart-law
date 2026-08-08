@@ -46,31 +46,55 @@
 <div class="page">
     <mat-card class="result-card">
         <h2 class="title">ผลการทดสอบ</h2>
-        <p class="subtitle">ค่า Precision ที่ได้ 0.93 หรือ 93%</p>
 
-        <div class="table-wrapper">
-            <table class="result-table">
-                <thead>
-                    <tr>
-                        <th>ข้อความ</th>
-                        <th>ผลลัพธ์</th>
-                        <th>การทำนาย</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let row of results">
-                        <td>{{ row.text }}</td>
-                        <td>{{ row.actual }}</td>
-                        <td>{{ row.predicted }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <ng-container *ngIf="hasResult; else noResult">
+            <p class="subtitle">
+                Precision@{{ k }} ที่ได้ {{ precisionText }}
+                <span class="count-text">(ถูกต้อง {{ correctCount }} จาก {{ total }} ข้อ)</span>
+            </p>
 
-        <!-- <div class="action-bottom">
-            <button mat-raised-button color="primary">
-                กลับบ้าน
-            </button>
-        </div> -->
+            <div class="table-wrapper">
+                <table class="result-table">
+                    <thead>
+                        <tr>
+                            <th>คำถาม</th>
+                            <th>มาตราที่ถูกต้อง</th>
+                            <th>มาตราที่ระบบค้นเจอ (top-{{ k }})</th>
+                            <th>ผล</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let row of results">
+                            <td>{{ row.question }}</td>
+                            <td>{{ row.actual_article }}</td>
+                            <td>
+                                <mat-chip-listbox>
+                                    <mat-chip-option *ngFor="let a of row.predicted_articles" [selectable]="false"
+                                        [class.match-chip]="a === row.actual_article">
+                                        {{ a }}
+                                    </mat-chip-option>
+                                </mat-chip-listbox>
+                            </td>
+                            <td>
+                                <mat-icon *ngIf="row.correct" class="icon-correct">check_circle</mat-icon>
+                                <mat-icon *ngIf="!row.correct" class="icon-wrong">cancel</mat-icon>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </ng-container>
+
+        <ng-template #noResult>
+            <p class="subtitle">
+                ยังไม่มีผลการทดสอบ กรุณาไปที่หน้า "ทดสอบ" แล้วอัปโหลดไฟล์ทดสอบก่อน
+            </p>
+            <div class="action-bottom">
+                <button mat-raised-button color="primary" (click)="goToTest()">
+                    <mat-icon>quiz</mat-icon>
+                    ไปหน้าทดสอบ
+                </button>
+            </div>
+        </ng-template>
     </mat-card>
 </div>

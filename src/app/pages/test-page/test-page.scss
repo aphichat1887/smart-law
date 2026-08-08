@@ -93,3 +93,14 @@
   border-radius: 12px;
   padding: 8px 30px;
 }
+
+/* เพิ่มใหม่: spinner ในปุ่ม upload */
+.upload-area button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-spinner {
+  display: inline-block;
+}

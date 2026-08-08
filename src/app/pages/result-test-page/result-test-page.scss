@@ -22,28 +22,36 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 /* card */
 .result-card {
   width: 80%;
   max-width: 950px;
+  max-height: 100%;
   background: #2f3f55;
   border-radius: 18px;
   padding: 30px;
   color: white;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 /* title */
 .title {
   margin-bottom: 5px;
   font-weight: 500;
+  flex-shrink: 0;
 }
 
 .subtitle {
   font-size: 14px;
   opacity: 0.85;
   margin-bottom: 20px;
+  flex-shrink: 0;
 }
 
 /* table */
@@ -51,7 +59,9 @@
   background: white;
   border-radius: 12px;
   padding: 15px;
-  overflow-x: auto;
+  overflow: auto;
+  flex: 1 1 auto;
+  min-height: 0; /* จำเป็นสำหรับ flex child ที่ต้อง scroll ได้จริง */
 }
 
 .result-table {
@@ -71,6 +81,9 @@
 .result-table th {
   background: #cfcfcf;
   font-weight: 500;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 /* bottom action */
@@ -83,4 +96,28 @@
 .action-bottom button {
   border-radius: 12px;
   padding: 8px 30px;
+}
+
+/* เพิ่มใหม่: สถานะไม่มีผล, ตัวนับ, ไอคอนถูก/ผิด, chip ที่ตรงกับคำตอบ */
+.count-text {
+  opacity: 0.75;
+  font-size: 13px;
+  margin-left: 8px;
+}
+
+.icon-correct {
+  color: #4caf50;
+}
+
+.icon-wrong {
+  color: #f44336;
+}
+
+::ng-deep .match-chip {
+  background: #2e7d32 !important;
+}
+
+::ng-deep .match-chip .mdc-evolution-chip__text-label {
+  color: #ffffff !important;
+  font-weight: 600;
 }
