@@ -10,14 +10,12 @@
         <mat-icon>home</mat-icon>
     </button>
 
-
     <!-- เมนู -->
     <button mat-icon-button [matMenuTriggerFor]="menu">
         <mat-icon>menu</mat-icon>
     </button>
 
     <mat-menu #menu="matMenu">
-
         <!-- ยังไม่ได้ Login -->
         <button mat-menu-item *ngIf="!isLoggedIn" (click)="goToLogin()">
             <mat-icon>admin_panel_settings</mat-icon>
@@ -39,7 +37,6 @@
             <mat-icon>logout</mat-icon>
             <span>Logout</span>
         </button>
-
     </mat-menu>
 </mat-toolbar>
 
@@ -47,24 +44,40 @@
     <mat-card class="file-card">
         <h2 class="title">File List</h2>
 
+        <div *ngIf="loadingList" class="status-row">
+            <mat-spinner diameter="24"></mat-spinner>
+            <span>กำลังโหลดรายชื่อไฟล์...</span>
+        </div>
+
+        <p *ngIf="!loadingList && files.length === 0" class="empty-text">
+            ยังไม่มีไฟล์ที่อัปโหลด
+        </p>
+
         <!-- file item -->
         <div class="file-item" *ngFor="let file of files">
-            <span class="file-name">{{ file }}</span>
+            <span class="file-name">
+                {{ file.filename }}
+                <span class="article-count">({{ file.article_count }} มาตรา)</span>
+            </span>
 
             <div class="actions">
-                <button mat-mini-fab color="warn">
-                    <mat-icon>delete</mat-icon>
-                </button>
-                <button mat-mini-fab color="accent">
-                    <mat-icon>edit</mat-icon>
+                <button mat-mini-fab color="warn" matTooltip="ลบไฟล์นี้" [disabled]="deletingFilename === file.filename"
+                    (click)="deleteFile(file.filename)">
+                    <mat-spinner *ngIf="deletingFilename === file.filename" diameter="20"></mat-spinner>
+                    <mat-icon *ngIf="deletingFilename !== file.filename">delete</mat-icon>
                 </button>
             </div>
         </div>
 
+        <!-- ช่องเลือกไฟล์ที่ซ่อนไว้ ให้ปุ่ม Upload กดแล้วสั่งเปิดแทน -->
+        <input #fileInput type="file" accept="application/pdf" hidden (change)="onFileSelected($event)" />
+
         <div class="upload-area">
-            <button mat-raised-button color="primary">
-                <mat-icon>upload</mat-icon>
-                Upload
+            <button mat-raised-button color="primary" [disabled]="uploading" (click)="openFilePicker()">
+                <mat-spinner *ngIf="uploading" diameter="20" class="btn-spinner"></mat-spinner>
+                <mat-icon *ngIf="!uploading">upload</mat-icon>
+                <span *ngIf="!uploading">Upload</span>
+                <span *ngIf="uploading">กำลังประมวลผล...</span>
             </button>
         </div>
     </mat-card>
