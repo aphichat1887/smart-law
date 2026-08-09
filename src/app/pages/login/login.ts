@@ -12,6 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -30,7 +31,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   styleUrls: ['./login.scss'],
 })
 export class LoginPage {
-  username = '';
+  email = '';
   password = '';
   showPassword = false;
   loading = false;
@@ -42,34 +43,67 @@ export class LoginPage {
   private readonly TEMP_USERNAME = 'admin';
   private readonly TEMP_PASSWORD = '1';
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) { }
 
   login(): void {
-    if (!this.username.trim() || !this.password.trim()) {
-      this.error = 'กรุณากรอก username และ password ให้ครบ';
+
+    if (!this.email.trim() || !this.password.trim()) {
+      this.error = 'กรุณากรอกอีเมลและรหัสผ่านให้ครบ';
       return;
     }
 
     this.loading = true;
     this.error = '';
 
-    // TODO: เปลี่ยนตรงนี้ให้เรียก backend จริง เช่น
-    // this.authService.login(this.username, this.password).subscribe({
-    //   next: () => this.router.navigate(['/admin']),
-    //   error: () => { this.error = 'username หรือ password ไม่ถูกต้อง'; this.loading = false; }
-    // });
+    this.authService.login(
+      this.email.trim(),
+      this.password
+    ).subscribe({
 
-    setTimeout(() => {
-      this.loading = false;
+      next: (res) => {
 
-      if (this.username === this.TEMP_USERNAME && this.password === this.TEMP_PASSWORD) {
-        // เก็บสถานะล็อกอินแบบง่ายๆ ไว้ก่อน (ชั่วคราว ยังไม่ใช่ token จริง)
-        localStorage.setItem('isAdminLoggedIn', 'true');
-        this.router.navigate(['/']);
-      } else {
-        this.error = 'username หรือ password ไม่ถูกต้อง';
+        this.loading = false;
+
+        if (res.success) {
+
+          localStorage.setItem(
+            'isAdminLoggedIn',
+            'true'
+          );
+
+          localStorage.setItem(
+            'adminEmail',
+            res.email
+          );
+
+          this.router.navigate(['/']);
+
+        }
+
+      },
+
+      error: (err) => {
+
+        this.loading = false;
+
+        if (err.status === 401) {
+
+          this.error =
+            'อีเมลหรือรหัสผ่านไม่ถูกต้อง';
+
+        } else {
+
+          this.error =
+            'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้';
+
+        }
+
       }
-    }, 500);
+
+    });
   }
 
   goBack(): void {
