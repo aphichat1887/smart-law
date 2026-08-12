@@ -1,7 +1,4 @@
 // src/app/pages/main/main.ts
-// แก้ 2 จุดจากโค้ดเดิมที่ให้ไป: (1) class ชื่อ Main ให้ตรงกับที่ app.routes.ts import
-// (2) templateUrl/styleUrls ให้ชี้ไปไฟล์ในโฟลเดอร์เดียวกัน (main.html / main.scss)
-// ปรับ import path ของ SearchService ให้ตรงกับตำแหน่งไฟล์จริงในโปรเจกต์
 
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -43,15 +40,18 @@ export class Main implements OnInit {
   sources: SourceItem[] = [];
   loading = false;
   error = '';
+
   isLoggedIn = false;
+  isSuperAdmin = false;
 
   constructor(
     private searchService: SearchService,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.isLoggedIn = localStorage.getItem('isAdminLoggedIn') === 'true';
+    this.isSuperAdmin = localStorage.getItem('adminRole') === 'super_admin';
   }
 
   goToLogin(): void {
@@ -66,9 +66,16 @@ export class Main implements OnInit {
     this.router.navigate(['/test']);
   }
 
+  goToManageAdmins(): void {
+    this.router.navigate(['/manage-admins']);
+  }
+
   logout(): void {
     localStorage.removeItem('isAdminLoggedIn');
+    localStorage.removeItem('adminEmail');
+    localStorage.removeItem('adminRole');
     this.isLoggedIn = false;
+    this.isSuperAdmin = false;
   }
 
   ask(): void {

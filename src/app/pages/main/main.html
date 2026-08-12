@@ -4,18 +4,16 @@
         Smart Law
     </span>
     <span class="spacer"></span>
+
     <button mat-icon-button [matMenuTriggerFor]="menu">
         <mat-icon>menu</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-
-        <!-- ยังไม่ได้ Login -->
         <button mat-menu-item *ngIf="!isLoggedIn" (click)="goToLogin()">
             <mat-icon>admin_panel_settings</mat-icon>
             <span>Login for admin</span>
         </button>
 
-        <!-- Login แล้ว -->
         <button mat-menu-item *ngIf="isLoggedIn" (click)="goToUpload()">
             <mat-icon>upload_file</mat-icon>
             <span>อัปโหลดเอกสาร</span>
@@ -26,11 +24,15 @@
             <span>ทดสอบ</span>
         </button>
 
+        <button mat-menu-item *ngIf="isSuperAdmin" (click)="goToManageAdmins()">
+            <mat-icon>manage_accounts</mat-icon>
+            <span>จัดการแอดมิน</span>
+        </button>
+
         <button mat-menu-item *ngIf="isLoggedIn" (click)="logout()">
             <mat-icon>logout</mat-icon>
             <span>Logout</span>
         </button>
-
     </mat-menu>
 </mat-toolbar>
 
@@ -51,20 +53,11 @@
 
             <div *ngIf="sources.length" class="sources">
                 <h4>อ้างอิง</h4>
-                <div class="sources" *ngIf="sources.length">
-                    <h4>
-                        <mat-icon>gavel</mat-icon>
-                        บทกฎหมายที่อ้างอิง
-                    </h4>
-
-                    <div class="source-tags">
-                        <div class="source-tag" *ngFor="let s of sources">
-                            <span class="article-number">
-                                มาตรา {{ s.article }}
-                            </span>
-                        </div>
-                    </div>
-                </div>
+                <mat-chip-listbox>
+                    <mat-chip-option *ngFor="let s of sources" [selectable]="false">
+                        มาตรา {{ s.article }}
+                    </mat-chip-option>
+                </mat-chip-listbox>
             </div>
         </div>
 
@@ -73,8 +66,13 @@
 
     <div class="input-area">
         <mat-form-field appearance="outline" class="input-field">
-            <input matInput placeholder="พิมพ์คำถามทางกฎหมายที่นี่" [(ngModel)]="question" (keyup.enter)="ask()"
-                [disabled]="loading" />
+            <input
+                matInput
+                placeholder="พิมพ์คำถามทางกฎหมายที่นี่"
+                [(ngModel)]="question"
+                (keyup.enter)="ask()"
+                [disabled]="loading"
+            />
         </mat-form-field>
 
         <button mat-fab color="primary" (click)="ask()" [disabled]="loading">

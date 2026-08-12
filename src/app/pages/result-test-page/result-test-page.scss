@@ -91,6 +91,7 @@
   margin-top: 25px;
   display: flex;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .action-bottom button {

@@ -79,6 +79,11 @@ export class LoginPage {
             res.email
           );
 
+          localStorage.setItem(
+            'adminRole',
+            res.role
+          );
+
           this.router.navigate(['/']);
 
         }

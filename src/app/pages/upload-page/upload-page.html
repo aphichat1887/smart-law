@@ -33,6 +33,11 @@
             <span>ทดสอบ</span>
         </button>
 
+        <button mat-menu-item *ngIf="isSuperAdmin" (click)="goToManageAdmins()">
+            <mat-icon>manage_accounts</mat-icon>
+            <span>จัดการแอดมิน</span>
+        </button>
+
         <button mat-menu-item *ngIf="isLoggedIn" (click)="logout()">
             <mat-icon>logout</mat-icon>
             <span>Logout</span>
@@ -61,19 +66,38 @@
             </span>
 
             <div class="actions">
-                <button mat-mini-fab color="warn" matTooltip="ลบไฟล์นี้" [disabled]="deletingFilename === file.filename"
-                    (click)="deleteFile(file.filename)">
-                    <mat-spinner *ngIf="deletingFilename === file.filename" diameter="20"></mat-spinner>
+                <button
+                    mat-mini-fab
+                    color="warn"
+                    matTooltip="ลบไฟล์นี้"
+                    [disabled]="deletingFilename === file.filename"
+                    (click)="deleteFile(file.filename)"
+                >
+                    <mat-spinner
+                        *ngIf="deletingFilename === file.filename"
+                        diameter="20"
+                    ></mat-spinner>
                     <mat-icon *ngIf="deletingFilename !== file.filename">delete</mat-icon>
                 </button>
             </div>
         </div>
 
         <!-- ช่องเลือกไฟล์ที่ซ่อนไว้ ให้ปุ่ม Upload กดแล้วสั่งเปิดแทน -->
-        <input #fileInput type="file" accept="application/pdf" hidden (change)="onFileSelected($event)" />
+        <input
+            #fileInput
+            type="file"
+            accept="application/pdf"
+            hidden
+            (change)="onFileSelected($event)"
+        />
 
         <div class="upload-area">
-            <button mat-raised-button color="primary" [disabled]="uploading" (click)="openFilePicker()">
+            <button
+                mat-raised-button
+                color="primary"
+                [disabled]="uploading"
+                (click)="openFilePicker()"
+            >
                 <mat-spinner *ngIf="uploading" diameter="20" class="btn-spinner"></mat-spinner>
                 <mat-icon *ngIf="!uploading">upload</mat-icon>
                 <span *ngIf="!uploading">Upload</span>

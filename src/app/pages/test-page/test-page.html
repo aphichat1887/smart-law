@@ -33,6 +33,11 @@
             <span>ทดสอบ</span>
         </button>
 
+        <button mat-menu-item *ngIf="isSuperAdmin" (click)="goToManageAdmins()">
+            <mat-icon>manage_accounts</mat-icon>
+            <span>จัดการแอดมิน</span>
+        </button>
+
         <button mat-menu-item *ngIf="isLoggedIn" (click)="logout()">
             <mat-icon>logout</mat-icon>
             <span>Logout</span>
@@ -53,11 +58,22 @@
         </div>
 
         <!-- ช่องเลือกไฟล์ที่ซ่อนไว้ -->
-        <input #fileInput type="file" accept=".xlsx,.xls" hidden (change)="onFileSelected($event)" />
+        <input
+            #fileInput
+            type="file"
+            accept=".xlsx,.xls"
+            hidden
+            (change)="onFileSelected($event)"
+        />
 
         <!-- upload -->
         <div class="upload-area">
-            <button mat-raised-button color="primary" [disabled]="evaluating" (click)="openFilePicker()">
+            <button
+                mat-raised-button
+                color="primary"
+                [disabled]="evaluating"
+                (click)="openFilePicker()"
+            >
                 <mat-spinner *ngIf="evaluating" diameter="20" class="btn-spinner"></mat-spinner>
                 <mat-icon *ngIf="!evaluating">upload</mat-icon>
                 <span *ngIf="!evaluating">Upload</span>

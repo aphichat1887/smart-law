@@ -35,6 +35,7 @@ export class UploadPage implements OnInit {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   isLoggedIn = false;
+  isSuperAdmin = false;
   files: FileItem[] = [];
   loadingList = false;
   uploading = false;
@@ -48,6 +49,9 @@ export class UploadPage implements OnInit {
 
   ngOnInit(): void {
     this.isLoggedIn = localStorage.getItem('isAdminLoggedIn') === 'true';
+
+    this.isSuperAdmin =
+      localStorage.getItem('adminRole') === 'super_admin';
     this.loadFiles();
   }
 
@@ -143,10 +147,18 @@ export class UploadPage implements OnInit {
     this.router.navigate(['/test']);
   }
 
+  goToManageAdmins(): void {
+    this.router.navigate(['/manage-admins']);
+  }
+
   // Logout
   logout(): void {
     localStorage.removeItem('isAdminLoggedIn');
+
+    localStorage.removeItem('adminEmail');
+    localStorage.removeItem('adminRole');
     this.isLoggedIn = false;
+    this.isSuperAdmin = false;
     this.router.navigate(['/']);
   }
 }

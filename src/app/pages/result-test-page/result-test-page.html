@@ -35,6 +35,11 @@
             <span>ทดสอบ</span>
         </button>
 
+        <button mat-menu-item *ngIf="isSuperAdmin" (click)="goToManageAdmins()">
+            <mat-icon>manage_accounts</mat-icon>
+            <span>จัดการแอดมิน</span>
+        </button>
+
         <button mat-menu-item *ngIf="isLoggedIn" (click)="logout()">
             <mat-icon>logout</mat-icon>
             <span>Logout</span>
@@ -69,8 +74,11 @@
                             <td>{{ row.actual_article }}</td>
                             <td>
                                 <mat-chip-listbox>
-                                    <mat-chip-option *ngFor="let a of row.predicted_articles" [selectable]="false"
-                                        [class.match-chip]="a === row.actual_article">
+                                    <mat-chip-option
+                                        *ngFor="let a of row.predicted_articles"
+                                        [selectable]="false"
+                                        [class.match-chip]="a === row.actual_article"
+                                    >
                                         {{ a }}
                                     </mat-chip-option>
                                 </mat-chip-listbox>

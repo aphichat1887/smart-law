@@ -31,6 +31,7 @@ import { EvaluationService, EvaluateRow } from '../../services/evaluation.servic
 })
 export class ResultTestPage implements OnInit {
   isLoggedIn = false;
+  isSuperAdmin = false;
 
   k = 3;
   total = 0;
@@ -46,6 +47,9 @@ export class ResultTestPage implements OnInit {
 
   ngOnInit(): void {
     this.isLoggedIn = localStorage.getItem('isAdminLoggedIn') === 'true';
+
+    this.isSuperAdmin =
+      localStorage.getItem('adminRole') === 'super_admin';
 
     const last = this.evaluationService.lastResult;
     if (last) {
@@ -80,6 +84,10 @@ export class ResultTestPage implements OnInit {
     this.router.navigate(['/test']);
   }
 
+  goToManageAdmins(): void {
+    this.router.navigate(['/manage-admins']);
+  }
+
   goToResult(): void {
     this.router.navigate(['/result']);
   }
@@ -87,7 +95,11 @@ export class ResultTestPage implements OnInit {
   // Logout
   logout(): void {
     localStorage.removeItem('isAdminLoggedIn');
+
+    localStorage.removeItem('adminEmail');
+    localStorage.removeItem('adminRole');
     this.isLoggedIn = false;
+    this.isSuperAdmin = false;
     this.router.navigate(['/']);
   }
 }

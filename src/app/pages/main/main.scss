@@ -1,339 +1,90 @@
-/* ===========================
-   Toolbar
-=========================== */
-
 .toolbar {
-  background: rgba(8, 25, 49, 0.9);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255, 255, 255, .08);
+  background: #0d2b52;
   color: white;
-  position: sticky;
-  top: 0;
-  z-index: 100;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.container {
+  background: radial-gradient(circle at top, #0b3c6f, #061a33);
+  height: calc(100vh - 64px);
+  padding: 20px;
+}
+
+.chat-box {
+  background: #2e3f55;
+  color: white;
+  height: 65vh;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 15px;
+}
+
+.intro {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.input-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.input-field {
+  flex: 1;
 }
 
 .brand {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 22px;
-  font-weight: 600;
-  letter-spacing: .5px;
-}
-
-.brand mat-icon {
-  color: #64b5ff;
-}
-
-.spacer {
-  flex: 1;
-}
-
-/* ===========================
-   Background
-=========================== */
-
-.container {
-
-  min-height: calc(100vh - 64px);
-
-  padding: 35px;
-
-  background:
-    radial-gradient(circle at top, #1f5aa8 0%, #0d2b52 35%, #07111d 100%);
-}
-
-/* ===========================
-   Chat Box
-=========================== */
-
-.chat-box {
-
-  height: 68vh;
-
-  padding: 30px;
-
-  border-radius: 24px;
-
-  background: rgba(255, 255, 255, .08);
-
-  backdrop-filter: blur(18px);
-
-  border: 1px solid rgba(255, 255, 255, .08);
-
-  box-shadow:
-    0 15px 40px rgba(0, 0, 0, .35);
-
-  color: white;
-
-  overflow: auto;
-}
-
-/* scrollbar */
-
-.chat-box::-webkit-scrollbar {
-  width: 8px;
-}
-
-.chat-box::-webkit-scrollbar-thumb {
-  background: #4d7dbb;
-  border-radius: 20px;
-}
-
-/* ===========================
-   Intro
-=========================== */
-
-.intro {
-
-  margin-top: 120px;
-
-  text-align: center;
-
-  font-size: 34px;
-
-  font-weight: 600;
-
-  line-height: 1.5;
-
-  color: white;
-}
-
-/* ===========================
-   Answer
-=========================== */
-
-.answer-box {
-
-  animation: fade .35s ease;
-
-}
-
-.answer-box h3 {
-
-  color: #7dc7ff;
-
-  margin-bottom: 15px;
-
-  font-size: 22px;
-}
-
-.answer-text {
-
-  white-space: pre-line;
-
-  line-height: 1.9;
-
-  font-size: 17px;
-
-  padding: 18px;
-
-  border-radius: 14px;
-
-  background: rgba(255, 255, 255, .06);
-
-  border-left: 5px solid #4fc3f7;
-}
-
-/* ===========================
-   Sources
-=========================== */
-
-.sources {
-  margin-top: 28px;
-}
-
-.sources h4 {
-  display: flex;
-  align-items: center;
   gap: 8px;
-  color: #cfe7ff;
-  font-size: 18px;
-  margin-bottom: 15px;
-}
-
-.sources h4 mat-icon {
-  color: #64b5ff;
-}
-
-.source-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.source-tag {
-
-  padding: 10px 18px;
-
-  border-radius: 999px;
-
-  background: rgba(255, 255, 255, 0.08);
-
-  border: 1px solid rgba(120, 180, 255, 0.3);
-
-  backdrop-filter: blur(12px);
-
-  transition: 0.25s;
-
-  box-shadow:
-    0 4px 12px rgba(0, 0, 0, .15);
-}
-
-.source-tag:hover {
-
-  transform: translateY(-2px);
-
-  background: rgba(100, 181, 255, 0.15);
-
-  border-color: #64b5ff;
-}
-
-.article-number {
-
-  color: white;
-
-  font-size: 15px;
-
   font-weight: 500;
-
-  letter-spacing: 0.3px;
 }
 
-/* ===========================
-   Loading
-=========================== */
-
-.loading {
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  gap: 18px;
-
-  height: 100%;
-
-  font-size: 18px;
-}
-
-/* ===========================
-   Input Area
-=========================== */
-
-.input-area {
-
-  margin-top: 20px;
-
-  display: flex;
-
-  gap: 15px;
-
-  align-items: center;
-}
-
-.input-field {
-
-  flex: 1;
-}
-
+// ----- ช่อง input: เปลี่ยนเป็นสีขาวล้วน -----
 ::ng-deep .input-field .mat-mdc-text-field-wrapper {
-
-  background: white;
-
-  border-radius: 18px;
-
-  box-shadow:
-    0 8px 20px rgba(0, 0, 0, .15);
-
-  transition: .3s;
-}
-
-::ng-deep .input-field .mat-mdc-text-field-wrapper:hover {
-
-  transform: translateY(-2px);
-
-  box-shadow:
-    0 12px 25px rgba(0, 0, 0, .2);
+  background: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 ::ng-deep .input-field .mat-mdc-form-field-subscript-wrapper {
-
   display: none;
 }
 
+// ตัวอักษรที่พิมพ์ต้องเป็นสีเข้ม เพราะพื้นหลังเปลี่ยนเป็นขาวแล้ว
 input {
-
-  color: #222 !important;
-
-  font-size: 17px;
+  color: #1a1a1a !important;
 }
 
 ::ng-deep .input-field input::placeholder {
-
-  color: #8a8a8a;
+  color: #6b7280 !important;
+  opacity: 1;
 }
 
-/* ===========================
-   Send Button
-=========================== */
-
-button[mat-fab] {
-
-  width: 62px;
-
-  height: 62px;
-
-  background: linear-gradient(135deg,
-      #1976d2,
-      #42a5f5) !important;
-
-  transition: .25s;
+// แก้สีฟ้าล้นจาก Chrome autofill ให้เข้ากับพื้นขาว
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  box-shadow: 0 0 0 1000px #ffffff inset !important;
+  -webkit-text-fill-color: #1a1a1a !important;
+  caret-color: #1a1a1a;
+  transition: background-color 600000s 0s, color 600000s 0s;
 }
 
-button[mat-fab]:hover {
-
-  transform: scale(1.08);
-
-  box-shadow:
-    0 10px 25px rgba(25, 118, 210, .45);
+// ----- Chip อ้างอิงมาตรา: เดิมมองไม่เห็นเพราะสีเทาจางบนพื้นเข้ม -----
+::ng-deep .sources mat-chip-option {
+  background: #3b5a82 !important;
+  border: 1px solid #6f9bd1 !important;
+  border-radius: 16px !important;
 }
 
-/* ===========================
-   Error
-=========================== */
-
-.error-text {
-
-  color: #ff8a80;
-
-  margin-top: 15px;
-
+::ng-deep .sources mat-chip-option .mdc-evolution-chip__text-label {
+  color: #ffffff !important;
   font-weight: 500;
-}
-
-/* ===========================
-   Animation
-=========================== */
-
-@keyframes fade {
-
-  from {
-
-    opacity: 0;
-
-    transform: translateY(10px);
-
-  }
-
-  to {
-
-    opacity: 1;
-
-    transform: translateY(0);
-
-  }
-
 }

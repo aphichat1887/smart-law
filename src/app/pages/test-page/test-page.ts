@@ -38,6 +38,7 @@ export class TestPage implements OnInit {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   isLoggedIn = false;
+  isSuperAdmin = false;
   selectedFileName: string | null = null;
   evaluating = false;
   precisionText: string | null = null;
@@ -51,6 +52,9 @@ export class TestPage implements OnInit {
 
   ngOnInit(): void {
     this.isLoggedIn = localStorage.getItem('isAdminLoggedIn') === 'true';
+
+    this.isSuperAdmin =
+      localStorage.getItem('adminRole') === 'super_admin';
 
     // ถ้ามีผลทดสอบค้างจากรอบก่อนหน้าอยู่แล้ว (ยังไม่ได้รีเฟรชหน้าเว็บ) โชว์ค่าล่าสุดไว้เลย
     const last = this.evaluationService.lastResult;
@@ -126,6 +130,10 @@ export class TestPage implements OnInit {
     this.router.navigate(['/test']);
   }
 
+  goToManageAdmins(): void {
+    this.router.navigate(['/manage-admins']);
+  }
+
   goToResult(): void {
     this.router.navigate(['/result']);
   }
@@ -133,7 +141,11 @@ export class TestPage implements OnInit {
   // Logout
   logout(): void {
     localStorage.removeItem('isAdminLoggedIn');
+
+    localStorage.removeItem('adminEmail');
+    localStorage.removeItem('adminRole');
     this.isLoggedIn = false;
+    this.isSuperAdmin = false;
     this.router.navigate(['/']);
   }
 }
