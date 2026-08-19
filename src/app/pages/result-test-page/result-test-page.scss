@@ -110,8 +110,23 @@
   color: #4caf50;
 }
 
+.icon-partial {
+  color: #ff9800;
+}
+
 .icon-wrong {
   color: #f44336;
+}
+
+.result-cell {
+  white-space: nowrap;
+}
+
+.score-text {
+  display: block;
+  font-size: 11px;
+  opacity: 0.75;
+  margin-top: 2px;
 }
 
 ::ng-deep .match-chip {

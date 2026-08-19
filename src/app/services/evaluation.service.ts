@@ -10,6 +10,8 @@ export interface EvaluateRow {
   actual_article: string;
   predicted_articles: string[];
   top1_article: string;
+  matched_articles: string[];
+  score: number;
   correct: boolean;
 }
 

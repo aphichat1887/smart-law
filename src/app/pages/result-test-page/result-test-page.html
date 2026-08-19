@@ -74,18 +74,17 @@
                             <td>{{ row.actual_article }}</td>
                             <td>
                                 <mat-chip-listbox>
-                                    <mat-chip-option
-                                        *ngFor="let a of row.predicted_articles"
-                                        [selectable]="false"
-                                        [class.match-chip]="a === row.actual_article"
-                                    >
+                                    <mat-chip-option *ngFor="let a of row.predicted_articles" [selectable]="false"
+                                        [class.match-chip]="row.matched_articles.includes(a)">
                                         {{ a }}
                                     </mat-chip-option>
                                 </mat-chip-listbox>
                             </td>
-                            <td>
-                                <mat-icon *ngIf="row.correct" class="icon-correct">check_circle</mat-icon>
-                                <mat-icon *ngIf="!row.correct" class="icon-wrong">cancel</mat-icon>
+                            <td class="result-cell">
+                                <mat-icon *ngIf="row.score === 1" class="icon-correct">check_circle</mat-icon>
+                                <mat-icon *ngIf="row.score > 0 && row.score < 1" class="icon-partial">adjust</mat-icon>
+                                <mat-icon *ngIf="row.score === 0" class="icon-wrong">cancel</mat-icon>
+                                <span class="score-text">{{ row.matched_articles.length }}/{{ k }}</span>
                             </td>
                         </tr>
                     </tbody>
