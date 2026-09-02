@@ -58,22 +58,11 @@
         </div>
 
         <!-- ช่องเลือกไฟล์ที่ซ่อนไว้ -->
-        <input
-            #fileInput
-            type="file"
-            accept=".xlsx,.xls"
-            hidden
-            (change)="onFileSelected($event)"
-        />
+        <input #fileInput type="file" accept=".xlsx,.xls" hidden (change)="onFileSelected($event)" />
 
         <!-- upload -->
         <div class="upload-area">
-            <button
-                mat-raised-button
-                color="primary"
-                [disabled]="evaluating"
-                (click)="openFilePicker()"
-            >
+            <button mat-raised-button color="primary" [disabled]="evaluating" (click)="openFilePicker()">
                 <mat-spinner *ngIf="evaluating" diameter="20" class="btn-spinner"></mat-spinner>
                 <mat-icon *ngIf="!evaluating">upload</mat-icon>
                 <span *ngIf="!evaluating">Upload</span>
@@ -82,8 +71,10 @@
         </div>
 
         <!-- result -->
-        <div class="result" *ngIf="hasResult && precisionText">
-            ค่า Precision@K ที่ได้ {{ precisionText }}
+        <div class="result" *ngIf="hasResult">
+            <div *ngIf="recallText">ค่า Recall@K ที่ได้ {{ recallText }}</div>
+            <div *ngIf="hitText">ค่า Hit@K ที่ได้ {{ hitText }}</div>
+            <div *ngIf="mrrText">ค่า MRR ที่ได้ {{ mrrText }}</div>
         </div>
 
         <div class="action-bottom" *ngIf="hasResult">

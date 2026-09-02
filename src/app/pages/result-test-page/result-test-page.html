@@ -54,7 +54,9 @@
 
         <ng-container *ngIf="hasResult; else noResult">
             <p class="subtitle">
-                Precision@{{ k }} ที่ได้ {{ precisionText }}
+                Recall@{{ k }} ที่ได้ {{ recallText }}
+                &nbsp;|&nbsp; Hit@{{ k }} ที่ได้ {{ hitText }}
+                &nbsp;|&nbsp; MRR ที่ได้ {{ mrrText }}
                 <span class="count-text">(ถูกต้อง {{ correctCount }} จาก {{ total }} ข้อ)</span>
             </p>
 
@@ -65,7 +67,9 @@
                             <th>คำถาม</th>
                             <th>มาตราที่ถูกต้อง</th>
                             <th>มาตราที่ระบบค้นเจอ (top-{{ k }})</th>
-                            <th>ผล</th>
+                            <th>Recall</th>
+                            <th>Hit</th>
+                            <th>Reciprocal Rank</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -81,10 +85,18 @@
                                 </mat-chip-listbox>
                             </td>
                             <td class="result-cell">
-                                <mat-icon *ngIf="row.score === 1" class="icon-correct">check_circle</mat-icon>
-                                <mat-icon *ngIf="row.score > 0 && row.score < 1" class="icon-partial">adjust</mat-icon>
-                                <mat-icon *ngIf="row.score === 0" class="icon-wrong">cancel</mat-icon>
-                                <span class="score-text">{{ row.matched_articles.length }}/{{ k }}</span>
+                                <mat-icon *ngIf="row.recall === 1" class="icon-correct">check_circle</mat-icon>
+                                <mat-icon *ngIf="row.recall > 0 && row.recall < 1"
+                                    class="icon-partial">adjust</mat-icon>
+                                <mat-icon *ngIf="row.recall === 0" class="icon-wrong">cancel</mat-icon>
+                                <span class="score-text">{{ (row.recall * 100).toFixed(0) }}%</span>
+                            </td>
+                            <td class="result-cell">
+                                <mat-icon *ngIf="row.hit" class="icon-correct">check_circle</mat-icon>
+                                <mat-icon *ngIf="!row.hit" class="icon-wrong">cancel</mat-icon>
+                            </td>
+                            <td class="result-cell">
+                                {{ row.reciprocal_rank.toFixed(2) }}
                             </td>
                         </tr>
                     </tbody>

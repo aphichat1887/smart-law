@@ -36,14 +36,16 @@ export class ResultTestPage implements OnInit {
   k = 3;
   total = 0;
   correctCount = 0;
-  precisionText = '';
+  recallText = '';
+  hitText = '';
+  mrrText = '';
   results: EvaluateRow[] = [];
   hasResult = false;
 
   constructor(
     private router: Router,
     private evaluationService: EvaluationService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.isLoggedIn = localStorage.getItem('isAdminLoggedIn') === 'true';
@@ -57,11 +59,15 @@ export class ResultTestPage implements OnInit {
       this.k = last.k;
       this.total = last.total;
       this.correctCount = last.correct_count;
-      this.precisionText = `${last.precision_at_k.toFixed(2)} หรือ ${(
-        last.precision_at_k * 100
-      ).toFixed(0)}%`;
+      this.recallText = this.formatMetric(last.recall_at_k);
+      this.hitText = this.formatMetric(last.hit_at_k);
+      this.mrrText = this.formatMetric(last.mrr);
       this.results = last.results;
     }
+  }
+
+  private formatMetric(value: number): string {
+    return `${value.toFixed(2)} หรือ ${(value * 100).toFixed(0)}%`;
   }
 
   // กลับหน้าหลัก

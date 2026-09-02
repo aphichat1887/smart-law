@@ -41,14 +41,16 @@ export class TestPage implements OnInit {
   isSuperAdmin = false;
   selectedFileName: string | null = null;
   evaluating = false;
-  precisionText: string | null = null;
+  recallText: string | null = null;
+  hitText: string | null = null;
+  mrrText: string | null = null;
   hasResult = false;
 
   constructor(
     private router: Router,
     private evaluationService: EvaluationService,
     private snackBar: MatSnackBar
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.isLoggedIn = localStorage.getItem('isAdminLoggedIn') === 'true';
@@ -60,7 +62,9 @@ export class TestPage implements OnInit {
     const last = this.evaluationService.lastResult;
     if (last) {
       this.hasResult = true;
-      this.precisionText = this.formatPrecision(last.precision_at_k);
+      this.recallText = this.formatMetric(last.recall_at_k);
+      this.hitText = this.formatMetric(last.hit_at_k);
+      this.mrrText = this.formatMetric(last.mrr);
       this.selectedFileName = null;
     }
   }
@@ -89,12 +93,17 @@ export class TestPage implements OnInit {
       next: (res) => {
         this.evaluating = false;
         this.hasResult = true;
-        this.precisionText = this.formatPrecision(res.precision_at_k);
+        this.recallText = this.formatMetric(res.recall_at_k);
+        this.hitText = this.formatMetric(res.hit_at_k);
+        this.mrrText = this.formatMetric(res.mrr);
         input.value = '';
         this.snackBar.open(
-          `ทดสอบเสร็จแล้ว: ถูกต้อง ${res.correct_count}/${res.total} ข้อ`,
+          `ทดสอบเสร็จแล้ว: ถูกต้อง ${res.correct_count}/${res.total} ข้อ ` +
+          `(Recall@${res.k} ${this.formatMetric(res.recall_at_k)}, ` +
+          `Hit@${res.k} ${this.formatMetric(res.hit_at_k)}, ` +
+          `MRR ${this.formatMetric(res.mrr)})`,
           'ปิด',
-          { duration: 4000 }
+          { duration: 5000 }
         );
       },
       error: (err) => {
@@ -106,7 +115,7 @@ export class TestPage implements OnInit {
     });
   }
 
-  private formatPrecision(value: number): string {
+  private formatMetric(value: number): string {
     return `${value.toFixed(2)} หรือ ${(value * 100).toFixed(0)}%`;
   }
 

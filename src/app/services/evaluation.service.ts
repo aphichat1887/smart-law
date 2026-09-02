@@ -11,7 +11,9 @@ export interface EvaluateRow {
   predicted_articles: string[];
   top1_article: string;
   matched_articles: string[];
-  score: number;
+  recall: number;
+  hit: boolean;
+  reciprocal_rank: number;
   correct: boolean;
 }
 
@@ -19,7 +21,9 @@ export interface EvaluateResponse {
   k: number;
   total: number;
   correct_count: number;
-  precision_at_k: number;
+  recall_at_k: number;
+  hit_at_k: number;
+  mrr: number;
   results: EvaluateRow[];
 }
 
@@ -33,7 +37,7 @@ export class EvaluationService {
   // (อยู่ได้จนกว่าจะรีเฟรชหน้าเว็บทั้งหน้า เพราะ service instance เดียวกันถูกใช้ร่วมกันทั้งแอป)
   lastResult: EvaluateResponse | null = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   evaluate(file: File, k: number = 3): Observable<EvaluateResponse> {
     const formData = new FormData();
