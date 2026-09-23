@@ -60,21 +60,76 @@
         <!-- ช่องเลือกไฟล์ที่ซ่อนไว้ -->
         <input #fileInput type="file" accept=".xlsx,.xls" hidden (change)="onFileSelected($event)" />
 
-        <!-- upload -->
+        <!-- เลือกไฟล์ -->
         <div class="upload-area">
-            <button mat-raised-button color="primary" [disabled]="evaluating" (click)="openFilePicker()">
-                <mat-spinner *ngIf="evaluating" diameter="20" class="btn-spinner"></mat-spinner>
-                <mat-icon *ngIf="!evaluating">upload</mat-icon>
-                <span *ngIf="!evaluating">Upload</span>
-                <span *ngIf="evaluating">กำลังทดสอบ...</span>
+            <button mat-raised-button color="primary" [disabled]="busy" (click)="openFilePicker()">
+                <mat-icon>upload</mat-icon>
+                <span>เลือกไฟล์</span>
             </button>
         </div>
 
-        <!-- result -->
+        <!-- เลือก distance metric -->
+        <div class="metric-area" *ngIf="selectedFile">
+            <div class="metric-label">เลือก Distance Metric</div>
+
+            <mat-radio-group [(ngModel)]="selectedMetric" class="metric-group" [disabled]="busy">
+                <mat-radio-button value="euclidean">Euclidean</mat-radio-button>
+                <mat-radio-button value="manhattan">Manhattan</mat-radio-button>
+                <mat-radio-button value="minkowski">Minkowski</mat-radio-button>
+            </mat-radio-group>
+
+            <mat-form-field appearance="outline" class="p-field" *ngIf="selectedMetric === 'minkowski'">
+                <mat-label>ค่า p</mat-label>
+                <input matInput type="number" min="1" [(ngModel)]="minkowskiP" [disabled]="busy" />
+            </mat-form-field>
+        </div>
+
+        <!-- ปุ่มเริ่มทดสอบ -->
+        <div class="action-buttons" *ngIf="selectedFile">
+            <button mat-raised-button color="primary" [disabled]="busy" (click)="startEvaluate()">
+                <mat-spinner *ngIf="evaluating" diameter="20" class="btn-spinner"></mat-spinner>
+                <mat-icon *ngIf="!evaluating">play_arrow</mat-icon>
+                <span *ngIf="!evaluating">เริ่มทดสอบ</span>
+                <span *ngIf="evaluating">กำลังทดสอบ...</span>
+            </button>
+
+            <button mat-stroked-button color="accent" [disabled]="busy" (click)="startCompare()">
+                <mat-spinner *ngIf="comparing" diameter="20" class="btn-spinner"></mat-spinner>
+                <mat-icon *ngIf="!comparing">compare_arrows</mat-icon>
+                <span *ngIf="!comparing">เปรียบเทียบทั้ง 3 metric</span>
+                <span *ngIf="comparing">กำลังเปรียบเทียบ...</span>
+            </button>
+        </div>
+
+        <!-- result: metric เดียว -->
         <div class="result" *ngIf="hasResult">
             <div *ngIf="recallText">ค่า Recall@K ที่ได้ {{ recallText }}</div>
             <div *ngIf="hitText">ค่า Hit@K ที่ได้ {{ hitText }}</div>
             <div *ngIf="mrrText">ค่า MRR ที่ได้ {{ mrrText }}</div>
+        </div>
+
+        <!-- result: เปรียบเทียบ 3 metric -->
+        <div class="compare-result" *ngIf="compareRows">
+            <table class="compare-table">
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Recall@K</th>
+                        <th>Hit@K</th>
+                        <th>MRR</th>
+                        <th>ถูกต้อง</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let row of compareRows">
+                        <td>{{ row.label }}</td>
+                        <td>{{ row.recall_at_k.toFixed(4) }}</td>
+                        <td>{{ row.hit_at_k.toFixed(4) }}</td>
+                        <td>{{ row.mrr.toFixed(4) }}</td>
+                        <td>{{ row.correct_count }}/{{ row.total }}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
         <div class="action-bottom" *ngIf="hasResult">
