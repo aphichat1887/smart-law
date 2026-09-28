@@ -37,12 +37,13 @@ export interface CompareMetricSummary {
   recall_at_k: number;
   hit_at_k: number;
   mrr: number;
+  results: EvaluateRow[];
 }
 
 export interface CompareResponse {
   k: number;
   p: number;
-  comparison: Record<DistanceMetric, CompareMetricSummary>;
+  comparison: Partial<Record<DistanceMetric, CompareMetricSummary>>;
 }
 
 @Injectable({
@@ -51,9 +52,9 @@ export interface CompareResponse {
 export class EvaluationService {
   private apiUrl = environment.apiUrl;
 
-  // เก็บผลล่าสุดไว้ในหน่วยความจำ ให้หน้า "ผลการทดสอบ" อ่านมาแสดงได้
-  // (อยู่ได้จนกว่าจะรีเฟรชหน้าเว็บทั้งหน้า เพราะ service instance เดียวกันถูกใช้ร่วมกันทั้งแอป)
-  lastResult: EvaluateResponse | null = null;
+  // เก็บผลทดสอบรอบล่าสุดไว้ในหน่วยความจำ (ทดสอบ 1 metric = 1 รายการ, หลาย metric = หลายรายการ)
+  // ให้หน้า "ผลการทดสอบ" อ่านไปแสดงได้ (อยู่ได้จนกว่าจะรีเฟรชหน้าเว็บ)
+  lastResults: EvaluateResponse[] = [];
 
   constructor(private http: HttpClient) { }
 
@@ -73,19 +74,48 @@ export class EvaluationService {
 
     return this.http
       .post<EvaluateResponse>(`${this.apiUrl}/evaluate`, formData, { params })
-      .pipe(tap((res) => (this.lastResult = res)));
+      .pipe(tap((res) => (this.lastResults = [{ ...res, metric }])));
   }
 
   // เทียบทั้ง 3 metric (euclidean / manhattan / minkowski) พร้อมกันในไฟล์เดียว
-  // ไม่บันทึกลง lastResult เพราะหน้า "ผลการทดสอบ" ยังออกแบบไว้สำหรับผลแบบ metric เดียว
-  evaluateCompare(file: File, k: number = 3, p: number = 3): Observable<CompareResponse> {
+  evaluateCompare(
+    file: File,
+    k: number = 3,
+    p: number = 3,
+    metrics?: DistanceMetric[]
+  ): Observable<CompareResponse> {
     const formData = new FormData();
     formData.append('file', file);
 
-    const params = new HttpParams().set('k', k).set('p', p);
+    let params = new HttpParams().set('k', k).set('p', p);
+    if (metrics && metrics.length > 0) {
+      params = params.set('metrics', metrics.join(','));
+    }
 
-    return this.http.post<CompareResponse>(`${this.apiUrl}/evaluate/compare`, formData, {
-      params,
-    });
+    return this.http
+      .post<CompareResponse>(`${this.apiUrl}/evaluate/compare`, formData, { params })
+      .pipe(
+        tap((res) => {
+          this.lastResults = (Object.keys(res.comparison) as DistanceMetric[]).map((m) => ({
+            ...res.comparison[m]!,
+            metric: m,
+          }));
+        })
+      );
   }
+}
+/**
+ * หา "ตัวที่ดีที่สุด" จากผลทดสอบหลาย metric
+ * เกณฑ์: ค่าเฉลี่ยของ Recall@K, Hit@K และ MRR สูงสุด (ถ้าเท่ากันจะถือว่าดีเท่ากันทุกตัวที่เสมอ)
+ * คืนค่าเป็น index ของรายการที่ดีที่สุด (มากกว่า 1 ตัวได้ถ้าเสมอ)
+ */
+export function findBestIndexes(
+  items: { recall_at_k: number; hit_at_k: number; mrr: number }[]
+): number[] {
+  if (items.length < 2) return [];
+  const scores = items.map((r) => (r.recall_at_k + r.hit_at_k + r.mrr) / 3);
+  const max = Math.max(...scores);
+  return scores
+    .map((s, i) => (Math.abs(s - max) < 1e-9 ? i : -1))
+    .filter((i) => i >= 0);
 }

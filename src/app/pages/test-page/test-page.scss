@@ -17,18 +17,19 @@
 
 /* page */
 .page {
-  height: calc(100vh - 64px);
+  min-height: calc(100vh - 64px);
+  padding: 24px 0;
+  box-sizing: border-box;
   background: radial-gradient(circle at top, #0b3c6f, #061a33);
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
 }
 
 /* card */
 .test-card {
   width: 75%;
   max-width: 900px;
-  min-height: 450px;
   background: #2f3f55;
   border-radius: 18px;
   padding: 30px;
@@ -179,4 +180,101 @@
 .compare-table td:first-child,
 .compare-table th:first-child {
   text-align: left;
+}
+
+/* ค่าที่ระบบใช้อยู่ตอนนี้ */
+.current-box {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 10px 15px;
+  margin-top: 18px;
+  font-size: 14px;
+}
+
+.current-label {
+  opacity: 0.75;
+  margin-right: 6px;
+}
+
+.num-field {
+  max-width: 140px;
+  margin-right: 12px;
+}
+
+::ng-deep .num-field .mat-mdc-form-field-label,
+::ng-deep .num-field input {
+  color: white;
+}
+
+.section-title {
+  margin-top: 22px;
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+/* checkbox metric + divider */
+::ng-deep .metric-group .mat-mdc-checkbox .mdc-label {
+  color: white;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  margin: 28px 0 8px;
+}
+
+/* ทำให้ checkbox / radio มองเห็นชัดบนพื้นเข้ม */
+.metric-group {
+  --mdc-checkbox-unselected-icon-color: #ffffff;
+  --mdc-checkbox-unselected-hover-icon-color: #ffffff;
+  --mdc-checkbox-unselected-focus-icon-color: #ffffff;
+  --mdc-checkbox-selected-icon-color: #4fc3f7;
+  --mdc-checkbox-selected-hover-icon-color: #4fc3f7;
+  --mdc-checkbox-selected-focus-icon-color: #4fc3f7;
+  --mdc-checkbox-selected-checkmark-color: #0d2b52;
+  --mdc-radio-unselected-icon-color: #ffffff;
+  --mdc-radio-unselected-hover-icon-color: #ffffff;
+  --mdc-radio-selected-icon-color: #4fc3f7;
+  --mdc-radio-selected-hover-icon-color: #4fc3f7;
+  --mdc-radio-selected-focus-icon-color: #4fc3f7;
+  --mdc-form-field-label-text-color: #ffffff;
+  --mat-checkbox-label-text-color: #ffffff;
+  --mat-radio-label-text-color: #ffffff;
+}
+
+.fixed-note {
+  font-size: 12px;
+  opacity: 0.7;
+  margin-top: 8px;
+}
+
+/* ไฮไลท์ metric ที่แนะนำ */
+.compare-table tr.best-row td {
+  background: rgba(102, 187, 106, 0.22);
+  font-weight: 600;
+}
+
+.best-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: 8px;
+  padding: 1px 8px 1px 4px;
+  border-radius: 999px;
+  background: #66bb6a;
+  color: #0d2b52;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.best-badge mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+.recommend-note {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #a5d6a7;
 }

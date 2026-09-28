@@ -1,115 +1,47 @@
-<mat-toolbar class="toolbar">
-    <span class="brand">
-        <mat-icon>balance</mat-icon>
-        Smart Law
-    </span>
-
-    <span class="spacer"></span>
-
-    <button mat-icon-button matTooltip="หน้าหลัก" (click)="goHome()">
-        <mat-icon>home</mat-icon>
-    </button>
-
-    <!-- เมนู -->
-    <button mat-icon-button [matMenuTriggerFor]="menu">
-        <mat-icon>menu</mat-icon>
-    </button>
-
-    <mat-menu #menu="matMenu">
-        <!-- ยังไม่ได้ Login -->
-        <button mat-menu-item *ngIf="!isLoggedIn" (click)="goToLogin()">
-            <mat-icon>admin_panel_settings</mat-icon>
-            <span>Login for admin</span>
-        </button>
-
-        <!-- Login แล้ว -->
-        <button mat-menu-item *ngIf="isLoggedIn" (click)="goToUpload()">
-            <mat-icon>upload_file</mat-icon>
-            <span>อัปโหลดเอกสาร</span>
-        </button>
-
-        <button mat-menu-item *ngIf="isLoggedIn" (click)="goToTest()">
-            <mat-icon>quiz</mat-icon>
-            <span>ทดสอบ</span>
-        </button>
-
-        <button mat-menu-item *ngIf="isSuperAdmin" (click)="goToManageAdmins()">
-            <mat-icon>manage_accounts</mat-icon>
-            <span>จัดการแอดมิน</span>
-        </button>
-
-        <button mat-menu-item *ngIf="isLoggedIn" (click)="logout()">
-            <mat-icon>logout</mat-icon>
-            <span>Logout</span>
-        </button>
-    </mat-menu>
-</mat-toolbar>
+<app-header></app-header>
 
 <div class="page">
     <mat-card class="test-card">
+
+        <!-- ================= ส่วนทดสอบ ================= -->
         <h2 class="title">ทดสอบระบบ</h2>
         <p class="subtitle">
-            อัปโหลดไฟล์ทดสอบ (.xlsx ต้องมีคอลัมน์ question และ article)
+            เลือก metric ที่ต้องการทดสอบ (เลือกได้หลายอัน) แล้วอัปโหลดไฟล์ .xlsx (คอลัมน์ question และ article)
         </p>
 
-        <!-- ไฟล์ที่เลือกล่าสุด -->
+        <div class="metric-area">
+            <div class="metric-label">เลือก Distance Metric ที่จะทดสอบ</div>
+
+            <div class="metric-group">
+                <mat-checkbox [(ngModel)]="testMetrics.euclidean" [disabled]="busy">Euclidean</mat-checkbox>
+                <mat-checkbox [(ngModel)]="testMetrics.manhattan" [disabled]="busy">Manhattan</mat-checkbox>
+                <mat-checkbox [(ngModel)]="testMetrics.minkowski" [disabled]="busy">Minkowski</mat-checkbox>
+            </div>
+            <div class="fixed-note">ใช้ K = 3 (และ p = 3 สำหรับ Minkowski)</div>
+        </div>
+
         <div class="file-item" *ngIf="selectedFileName">
             <span class="file-name">{{ selectedFileName }}</span>
         </div>
 
-        <!-- ช่องเลือกไฟล์ที่ซ่อนไว้ -->
         <input #fileInput type="file" accept=".xlsx,.xls" hidden (change)="onFileSelected($event)" />
 
-        <!-- เลือกไฟล์ -->
-        <div class="upload-area">
-            <button mat-raised-button color="primary" [disabled]="busy" (click)="openFilePicker()">
+        <div class="action-buttons">
+            <button mat-raised-button [disabled]="busy" (click)="openFilePicker()">
                 <mat-icon>upload</mat-icon>
-                <span>เลือกไฟล์</span>
+                <span>เลือกไฟล์ทดสอบ</span>
+            </button>
+
+            <button mat-raised-button color="primary" [disabled]="busy || !selectedFile" (click)="startTest()">
+                <mat-spinner *ngIf="testing" diameter="20" class="btn-spinner"></mat-spinner>
+                <mat-icon *ngIf="!testing">play_arrow</mat-icon>
+                <span *ngIf="!testing">เริ่มทดสอบ</span>
+                <span *ngIf="testing">กำลังทดสอบ...</span>
             </button>
         </div>
 
-        <!-- เลือก distance metric -->
-        <div class="metric-area" *ngIf="selectedFile">
-            <div class="metric-label">เลือก Distance Metric</div>
-
-            <mat-radio-group [(ngModel)]="selectedMetric" class="metric-group" [disabled]="busy">
-                <mat-radio-button value="euclidean">Euclidean</mat-radio-button>
-                <mat-radio-button value="manhattan">Manhattan</mat-radio-button>
-                <mat-radio-button value="minkowski">Minkowski</mat-radio-button>
-            </mat-radio-group>
-
-            <mat-form-field appearance="outline" class="p-field" *ngIf="selectedMetric === 'minkowski'">
-                <mat-label>ค่า p</mat-label>
-                <input matInput type="number" min="1" [(ngModel)]="minkowskiP" [disabled]="busy" />
-            </mat-form-field>
-        </div>
-
-        <!-- ปุ่มเริ่มทดสอบ -->
-        <div class="action-buttons" *ngIf="selectedFile">
-            <button mat-raised-button color="primary" [disabled]="busy" (click)="startEvaluate()">
-                <mat-spinner *ngIf="evaluating" diameter="20" class="btn-spinner"></mat-spinner>
-                <mat-icon *ngIf="!evaluating">play_arrow</mat-icon>
-                <span *ngIf="!evaluating">เริ่มทดสอบ</span>
-                <span *ngIf="evaluating">กำลังทดสอบ...</span>
-            </button>
-
-            <button mat-stroked-button color="accent" [disabled]="busy" (click)="startCompare()">
-                <mat-spinner *ngIf="comparing" diameter="20" class="btn-spinner"></mat-spinner>
-                <mat-icon *ngIf="!comparing">compare_arrows</mat-icon>
-                <span *ngIf="!comparing">เปรียบเทียบทั้ง 3 metric</span>
-                <span *ngIf="comparing">กำลังเปรียบเทียบ...</span>
-            </button>
-        </div>
-
-        <!-- result: metric เดียว -->
-        <div class="result" *ngIf="hasResult">
-            <div *ngIf="recallText">ค่า Recall@K ที่ได้ {{ recallText }}</div>
-            <div *ngIf="hitText">ค่า Hit@K ที่ได้ {{ hitText }}</div>
-            <div *ngIf="mrrText">ค่า MRR ที่ได้ {{ mrrText }}</div>
-        </div>
-
-        <!-- result: เปรียบเทียบ 3 metric -->
-        <div class="compare-result" *ngIf="compareRows">
+        <!-- ผลทดสอบ -->
+        <div class="compare-result" *ngIf="resultRows">
             <table class="compare-table">
                 <thead>
                     <tr>
@@ -121,8 +53,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let row of compareRows">
-                        <td>{{ row.label }}</td>
+                    <tr *ngFor="let row of resultRows; let i = index" [class.best-row]="bestIndexes.includes(i)">
+                        <td>
+                            {{ row.label }}
+                            <span class="best-badge" *ngIf="bestIndexes.includes(i)">
+                                <mat-icon>star</mat-icon> แนะนำ
+                            </span>
+                        </td>
                         <td>{{ row.recall_at_k.toFixed(4) }}</td>
                         <td>{{ row.hit_at_k.toFixed(4) }}</td>
                         <td>{{ row.mrr.toFixed(4) }}</td>
@@ -130,12 +67,47 @@
                     </tr>
                 </tbody>
             </table>
+            <p class="recommend-note" *ngIf="recommendText">{{ recommendText }}</p>
         </div>
 
-        <div class="action-bottom" *ngIf="hasResult">
+        <div class="action-bottom" *ngIf="canViewDetail">
             <button mat-raised-button color="primary" (click)="goToResult()">
                 <mat-icon>assessment</mat-icon>
-                ผลการทดสอบ
+                ผลการทดสอบ (รายข้อ)
+            </button>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- ================= ส่วนตั้งค่า ================= -->
+        <h2 class="title">ตั้งค่า KNN</h2>
+        <p class="subtitle">
+            เลือกค่าที่ระบบจะใช้ตอนตอบคำถามจริง (มีผลกับผู้ใช้ทุกคน จนกว่าจะเปลี่ยนอีกครั้ง)
+        </p>
+
+        <div class="current-box" *ngIf="currentMetric">
+            <span class="current-label">ค่าที่ระบบใช้อยู่ตอนนี้:</span>
+            {{ metricLabels[currentMetric] }}, K = {{ currentK }}
+            <ng-container *ngIf="currentMetric === 'minkowski'">, p = {{ currentP }}</ng-container>
+        </div>
+
+        <div class="metric-area">
+            <div class="metric-label">Distance Metric</div>
+
+            <mat-radio-group [(ngModel)]="selectedMetric" class="metric-group" [disabled]="busy">
+                <mat-radio-button value="euclidean">Euclidean</mat-radio-button>
+                <mat-radio-button value="manhattan">Manhattan</mat-radio-button>
+                <mat-radio-button value="minkowski">Minkowski</mat-radio-button>
+            </mat-radio-group>
+            <div class="fixed-note">ใช้ K = 3 (และ p = 3 สำหรับ Minkowski)</div>
+        </div>
+
+        <div class="action-buttons">
+            <button mat-raised-button color="primary" [disabled]="busy" (click)="applySettings()">
+                <mat-spinner *ngIf="applying" diameter="20" class="btn-spinner"></mat-spinner>
+                <mat-icon *ngIf="!applying">check_circle</mat-icon>
+                <span *ngIf="!applying">ใช้ค่านี้กับระบบ</span>
+                <span *ngIf="applying">กำลังบันทึก...</span>
             </button>
         </div>
     </mat-card>

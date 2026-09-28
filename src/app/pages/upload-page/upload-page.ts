@@ -1,32 +1,30 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FormsModule } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
 import { FileService, FileItem } from '../../services/file.service';
+import { Header } from '../header/header';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-upload-page',
   imports: [
     CommonModule,
-    MatToolbarModule,
     MatButtonModule,
     MatIconModule,
     MatCardModule,
     MatInputModule,
     FormsModule,
     MatTooltipModule,
-    MatMenuModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
+    Header,
   ],
   templateUrl: './upload-page.html',
   styleUrl: './upload-page.scss',
@@ -34,24 +32,17 @@ import { FileService, FileItem } from '../../services/file.service';
 export class UploadPage implements OnInit {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
-  isLoggedIn = false;
-  isSuperAdmin = false;
   files: FileItem[] = [];
   loadingList = false;
   uploading = false;
   deletingFilename: string | null = null;
 
   constructor(
-    private router: Router,
     private fileService: FileService,
     private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
-    this.isLoggedIn = localStorage.getItem('isAdminLoggedIn') === 'true';
-
-    this.isSuperAdmin =
-      localStorage.getItem('adminRole') === 'super_admin';
     this.loadFiles();
   }
 
@@ -107,6 +98,12 @@ export class UploadPage implements OnInit {
     });
   }
 
+  // เปิดดูตัวอย่างไฟล์ PDF ในแท็บใหม่
+  previewFile(filename: string): void {
+    const url = `${environment.apiUrl}/files/${encodeURIComponent(filename)}/preview`;
+    window.open(url, '_blank');
+  }
+
   deleteFile(filename: string): void {
     this.deletingFilename = filename;
     this.fileService.deleteFile(filename).subscribe({
@@ -127,38 +124,4 @@ export class UploadPage implements OnInit {
     });
   }
 
-  // กลับหน้าหลัก
-  goHome(): void {
-    this.router.navigate(['/']);
-  }
-
-  // ไปหน้า Login
-  goToLogin(): void {
-    this.router.navigate(['/admin/login']);
-  }
-
-  // ไปหน้า Upload (อยู่หน้านี้แล้ว เผื่อเรียกจากเมนู)
-  goToUpload(): void {
-    this.router.navigate(['/upload']);
-  }
-
-  // ไปหน้าทดสอบ
-  goToTest(): void {
-    this.router.navigate(['/test']);
-  }
-
-  goToManageAdmins(): void {
-    this.router.navigate(['/manage-admins']);
-  }
-
-  // Logout
-  logout(): void {
-    localStorage.removeItem('isAdminLoggedIn');
-
-    localStorage.removeItem('adminEmail');
-    localStorage.removeItem('adminRole');
-    this.isLoggedIn = false;
-    this.isSuperAdmin = false;
-    this.router.navigate(['/']);
-  }
 }

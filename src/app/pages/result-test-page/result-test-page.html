@@ -1,64 +1,46 @@
-<mat-toolbar class="toolbar">
-    <span class="brand">
-        <mat-icon>balance</mat-icon>
-        Smart Law
-    </span>
-
-    <span class="spacer"></span>
-
-    <button mat-icon-button matTooltip="หน้าหลัก" (click)="goHome()">
-        <mat-icon>home</mat-icon>
-    </button>
-
-
-    <!-- เมนู -->
-    <button mat-icon-button [matMenuTriggerFor]="menu">
-        <mat-icon>menu</mat-icon>
-    </button>
-
-    <mat-menu #menu="matMenu">
-
-        <!-- ยังไม่ได้ Login -->
-        <button mat-menu-item *ngIf="!isLoggedIn" (click)="goToLogin()">
-            <mat-icon>admin_panel_settings</mat-icon>
-            <span>Login for admin</span>
-        </button>
-
-        <!-- Login แล้ว -->
-        <button mat-menu-item *ngIf="isLoggedIn" (click)="goToUpload()">
-            <mat-icon>upload_file</mat-icon>
-            <span>อัปโหลดเอกสาร</span>
-        </button>
-
-        <button mat-menu-item *ngIf="isLoggedIn" (click)="goToTest()">
-            <mat-icon>quiz</mat-icon>
-            <span>ทดสอบ</span>
-        </button>
-
-        <button mat-menu-item *ngIf="isSuperAdmin" (click)="goToManageAdmins()">
-            <mat-icon>manage_accounts</mat-icon>
-            <span>จัดการแอดมิน</span>
-        </button>
-
-        <button mat-menu-item *ngIf="isLoggedIn" (click)="logout()">
-            <mat-icon>logout</mat-icon>
-            <span>Logout</span>
-        </button>
-
-    </mat-menu>
-</mat-toolbar>
+<app-header></app-header>
 
 <div class="page">
     <mat-card class="result-card">
+        <div class="top-actions">
+            <button mat-stroked-button (click)="goBack()">
+                <mat-icon>arrow_back</mat-icon>
+                ย้อนกลับ
+            </button>
+        </div>
+
         <h2 class="title">ผลการทดสอบ</h2>
 
-        <ng-container *ngIf="hasResult; else noResult">
+        <ng-container *ngIf="selected; else noResult">
+
+            <!-- สลับดูผลของแต่ละ metric (แสดงเมื่อทดสอบหลายอัน) -->
+            <div class="metric-switch" *ngIf="allResults.length > 1">
+                <button mat-stroked-button *ngFor="let r of allResults" [class.active]="r === selected"
+                    (click)="select(r)">
+                    <mat-icon *ngIf="isBest(r)" class="star">star</mat-icon>
+                    {{ labelOf(r) }}
+                </button>
+            </div>
+            <p class="recommend-note" *ngIf="recommendText">{{ recommendText }}</p>
+
             <p class="subtitle">
-                Recall@{{ k }} ที่ได้ {{ recallText }}
-                &nbsp;|&nbsp; Hit@{{ k }} ที่ได้ {{ hitText }}
-                &nbsp;|&nbsp; MRR ที่ได้ {{ mrrText }}
-                <span class="count-text">(ถูกต้อง {{ correctCount }} จาก {{ total }} ข้อ)</span>
+                <strong>{{ labelOf(selected) }}</strong> &nbsp;|&nbsp;
+                Recall@{{ selected.k }} ที่ได้ {{ formatMetric(selected.recall_at_k) }}
+                &nbsp;|&nbsp; Hit@{{ selected.k }} ที่ได้ {{ formatMetric(selected.hit_at_k) }}
+                &nbsp;|&nbsp; MRR ที่ได้ {{ formatMetric(selected.mrr) }}
+                <span class="count-text">(ถูกต้อง {{ selected.correct_count }} จาก {{ selected.total }} ข้อ)</span>
             </p>
+
+            <!-- ใช้โมเดลนี้เลย -->
+            <div class="apply-row">
+                <button mat-raised-button color="primary" [disabled]="applying || isCurrent" (click)="applySelected()">
+                    <mat-spinner *ngIf="applying" diameter="20" class="btn-spinner"></mat-spinner>
+                    <mat-icon *ngIf="!applying">check_circle</mat-icon>
+                    <span *ngIf="!applying && !isCurrent">ใช้ {{ labelOf(selected) }} กับระบบ</span>
+                    <span *ngIf="!applying && isCurrent">{{ labelOf(selected) }} คือค่าที่ระบบใช้อยู่แล้ว</span>
+                    <span *ngIf="applying">กำลังบันทึก...</span>
+                </button>
+            </div>
 
             <div class="table-wrapper">
                 <table class="result-table">
@@ -66,14 +48,14 @@
                         <tr>
                             <th>คำถาม</th>
                             <th>มาตราที่ถูกต้อง</th>
-                            <th>มาตราที่ระบบค้นเจอ (top-{{ k }})</th>
+                            <th>มาตราที่ระบบค้นเจอ (top-{{ selected.k }})</th>
                             <th>Recall</th>
                             <th>Hit</th>
                             <th>Reciprocal Rank</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let row of results">
+                        <tr *ngFor="let row of selected.results">
                             <td>{{ row.question }}</td>
                             <td>{{ row.actual_article }}</td>
                             <td>

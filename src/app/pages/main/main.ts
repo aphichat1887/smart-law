@@ -3,7 +3,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -11,9 +10,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatMenuModule } from '@angular/material/menu';
-import { Router } from '@angular/router';
 import { SearchService, SourceItem } from '../../services/search.service';
+import { Header } from '../header/header';
 
 @Component({
   selector: 'app-main',
@@ -21,7 +19,6 @@ import { SearchService, SourceItem } from '../../services/search.service';
   imports: [
     CommonModule,
     FormsModule,
-    MatToolbarModule,
     MatIconModule,
     MatCardModule,
     MatFormFieldModule,
@@ -29,7 +26,7 @@ import { SearchService, SourceItem } from '../../services/search.service';
     MatButtonModule,
     MatProgressSpinnerModule,
     MatChipsModule,
-    MatMenuModule,
+    Header,
   ],
   templateUrl: './main.html',
   styleUrls: ['./main.scss'],
@@ -41,42 +38,9 @@ export class Main implements OnInit {
   loading = false;
   error = '';
 
-  isLoggedIn = false;
-  isSuperAdmin = false;
+  constructor(private searchService: SearchService) {}
 
-  constructor(
-    private searchService: SearchService,
-    private router: Router
-  ) {}
-
-  ngOnInit(): void {
-    this.isLoggedIn = localStorage.getItem('isAdminLoggedIn') === 'true';
-    this.isSuperAdmin = localStorage.getItem('adminRole') === 'super_admin';
-  }
-
-  goToLogin(): void {
-    this.router.navigate(['/admin/login']);
-  }
-
-  goToUpload(): void {
-    this.router.navigate(['/upload']);
-  }
-
-  goToTest(): void {
-    this.router.navigate(['/test']);
-  }
-
-  goToManageAdmins(): void {
-    this.router.navigate(['/manage-admins']);
-  }
-
-  logout(): void {
-    localStorage.removeItem('isAdminLoggedIn');
-    localStorage.removeItem('adminEmail');
-    localStorage.removeItem('adminRole');
-    this.isLoggedIn = false;
-    this.isSuperAdmin = false;
-  }
+  ngOnInit(): void {}
 
   ask(): void {
     const q = this.question.trim();

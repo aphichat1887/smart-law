@@ -2,18 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatChipsModule } from '@angular/material/chips';
 import { AdminService, AdminItem } from '../../services/admin.service';
+import { Header } from '../header/header';
 
 @Component({
   selector: 'app-manage-admins',
@@ -21,25 +20,21 @@ import { AdminService, AdminItem } from '../../services/admin.service';
   imports: [
     CommonModule,
     FormsModule,
-    MatToolbarModule,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    MatMenuModule,
     MatTooltipModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatChipsModule,
+    Header,
   ],
   templateUrl: './manage-admins.html',
   styleUrls: ['./manage-admins.scss'],
 })
 export class ManageAdmins implements OnInit {
-  isLoggedIn = false;
-  isSuperAdmin = false;
-
   admins: AdminItem[] = [];
   loadingList = false;
 
@@ -56,10 +51,10 @@ export class ManageAdmins implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.isLoggedIn = localStorage.getItem('isAdminLoggedIn') === 'true';
-    this.isSuperAdmin = localStorage.getItem('adminRole') === 'super_admin';
+    const isLoggedIn = localStorage.getItem('isAdminLoggedIn') === 'true';
+    const isSuperAdmin = localStorage.getItem('adminRole') === 'super_admin';
 
-    if (!this.isLoggedIn || !this.isSuperAdmin) {
+    if (!isLoggedIn || !isSuperAdmin) {
       // ไม่ใช่ super_admin ห้ามอยู่หน้านี้ เด้งกลับหน้าหลัก
       this.router.navigate(['/']);
       return;
@@ -123,14 +118,4 @@ export class ManageAdmins implements OnInit {
     });
   }
 
-  goHome(): void {
-    this.router.navigate(['/']);
-  }
-
-  logout(): void {
-    localStorage.removeItem('isAdminLoggedIn');
-    localStorage.removeItem('adminEmail');
-    localStorage.removeItem('adminRole');
-    this.router.navigate(['/']);
-  }
 }

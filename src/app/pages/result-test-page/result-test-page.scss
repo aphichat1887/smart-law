@@ -137,3 +137,57 @@
   color: #ffffff !important;
   font-weight: 600;
 }
+
+/* ปุ่มย้อนกลับ / สลับ metric / ใช้โมเดลนี้ */
+.top-actions {
+  margin-bottom: 12px;
+}
+
+.top-actions button,
+.metric-switch button {
+  color: white;
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.metric-switch {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 8px 0 14px;
+}
+
+.metric-switch button.active {
+  background: #4fc3f7;
+  color: #0d2b52;
+  border-color: #4fc3f7;
+}
+
+.apply-row {
+  margin: 4px 0 18px;
+}
+
+.apply-row button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-spinner {
+  display: inline-block;
+}
+
+/* ไฮไลท์ metric ที่แนะนำ */
+.metric-switch .star {
+  color: #ffd54f;
+  margin-right: 4px;
+}
+
+.metric-switch button.active .star {
+  color: #b8860b;
+}
+
+.recommend-note {
+  margin: -4px 0 12px;
+  font-size: 13px;
+  color: #a5d6a7;
+}

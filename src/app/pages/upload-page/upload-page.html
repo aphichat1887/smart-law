@@ -1,49 +1,4 @@
-<mat-toolbar class="toolbar">
-    <span class="brand">
-        <mat-icon>balance</mat-icon>
-        Smart Law
-    </span>
-
-    <span class="spacer"></span>
-
-    <button mat-icon-button matTooltip="หน้าหลัก" (click)="goHome()">
-        <mat-icon>home</mat-icon>
-    </button>
-
-    <!-- เมนู -->
-    <button mat-icon-button [matMenuTriggerFor]="menu">
-        <mat-icon>menu</mat-icon>
-    </button>
-
-    <mat-menu #menu="matMenu">
-        <!-- ยังไม่ได้ Login -->
-        <button mat-menu-item *ngIf="!isLoggedIn" (click)="goToLogin()">
-            <mat-icon>admin_panel_settings</mat-icon>
-            <span>Login for admin</span>
-        </button>
-
-        <!-- Login แล้ว -->
-        <button mat-menu-item *ngIf="isLoggedIn" (click)="goToUpload()">
-            <mat-icon>upload_file</mat-icon>
-            <span>อัปโหลดเอกสาร</span>
-        </button>
-
-        <button mat-menu-item *ngIf="isLoggedIn" (click)="goToTest()">
-            <mat-icon>quiz</mat-icon>
-            <span>ทดสอบ</span>
-        </button>
-
-        <button mat-menu-item *ngIf="isSuperAdmin" (click)="goToManageAdmins()">
-            <mat-icon>manage_accounts</mat-icon>
-            <span>จัดการแอดมิน</span>
-        </button>
-
-        <button mat-menu-item *ngIf="isLoggedIn" (click)="logout()">
-            <mat-icon>logout</mat-icon>
-            <span>Logout</span>
-        </button>
-    </mat-menu>
-</mat-toolbar>
+<app-header></app-header>
 
 <div class="page">
     <mat-card class="file-card">
@@ -66,38 +21,23 @@
             </span>
 
             <div class="actions">
-                <button
-                    mat-mini-fab
-                    color="warn"
-                    matTooltip="ลบไฟล์นี้"
-                    [disabled]="deletingFilename === file.filename"
-                    (click)="deleteFile(file.filename)"
-                >
-                    <mat-spinner
-                        *ngIf="deletingFilename === file.filename"
-                        diameter="20"
-                    ></mat-spinner>
+                <button mat-mini-fab color="primary" matTooltip="ดูตัวอย่าง PDF" (click)="previewFile(file.filename)">
+                    <mat-icon>visibility</mat-icon>
+                </button>
+
+                <button mat-mini-fab color="warn" matTooltip="ลบไฟล์นี้" [disabled]="deletingFilename === file.filename"
+                    (click)="deleteFile(file.filename)">
+                    <mat-spinner *ngIf="deletingFilename === file.filename" diameter="20"></mat-spinner>
                     <mat-icon *ngIf="deletingFilename !== file.filename">delete</mat-icon>
                 </button>
             </div>
         </div>
 
         <!-- ช่องเลือกไฟล์ที่ซ่อนไว้ ให้ปุ่ม Upload กดแล้วสั่งเปิดแทน -->
-        <input
-            #fileInput
-            type="file"
-            accept="application/pdf"
-            hidden
-            (change)="onFileSelected($event)"
-        />
+        <input #fileInput type="file" accept="application/pdf" hidden (change)="onFileSelected($event)" />
 
         <div class="upload-area">
-            <button
-                mat-raised-button
-                color="primary"
-                [disabled]="uploading"
-                (click)="openFilePicker()"
-            >
+            <button mat-raised-button color="primary" [disabled]="uploading" (click)="openFilePicker()">
                 <mat-spinner *ngIf="uploading" diameter="20" class="btn-spinner"></mat-spinner>
                 <mat-icon *ngIf="!uploading">upload</mat-icon>
                 <span *ngIf="!uploading">Upload</span>
