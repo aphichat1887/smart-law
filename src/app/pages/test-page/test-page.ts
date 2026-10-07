@@ -62,7 +62,7 @@ export class TestPage implements OnInit {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   readonly metricLabels = METRIC_LABELS;
-
+  readonly sampleFileUrl = 'https://drive.google.com/drive/folders/1p8cqsHvHQm7lYtPgg-A1I2qmlYlmvHEL?usp=sharing';
   selectedFile: File | null = null;
   selectedFileName: string | null = null;
 

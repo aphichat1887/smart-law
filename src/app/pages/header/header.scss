@@ -3,6 +3,11 @@
   color: white;
   --mdc-icon-button-icon-color: #ffffff;
   --mat-icon-button-icon-color: #ffffff;
+
+  /* ปักหัวให้ติดบนตลอดเวลาเลื่อนหน้า */
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 .toolbar .mat-icon,
 .toolbar button {

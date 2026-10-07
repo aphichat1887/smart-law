@@ -382,3 +382,23 @@
     width: 100%;
   }
 }
+/* ลิงก์ตัวอย่างไฟล์ทดสอบ */
+.sample-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.sample-link:hover {
+  text-decoration: underline;
+}
+
+.sample-link mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}

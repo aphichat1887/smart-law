@@ -54,6 +54,11 @@
                     <span class="drop-main">{{ selectedFileName || 'คลิกเพื่อเลือกไฟล์' }}</span>
                     <span class="drop-sub" *ngIf="selectedFileName">คลิกอีกครั้งเพื่อเปลี่ยนไฟล์</span>
                 </button>
+
+                <a class="sample-link" [href]="sampleFileUrl" target="_blank" rel="noopener">
+                    <mat-icon>folder_open</mat-icon>
+                    ดูตัวอย่างไฟล์ทดสอบ
+                </a>
             </section>
 
             <!-- ขั้น 3 -->
