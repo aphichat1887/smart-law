@@ -1,42 +1,70 @@
+:host {
+  --navy: #143d6b;
+  --navy-dark: #0f3057;
+  --gold: #d4a259;
+  --gold-dark: #c08f45;
+  --bg: #f5f6fa;
+  --surface: #ffffff;
+  --text: #12355b;
+  --muted: #6b7a90;
+  --line: #e3e8ef;
+  --bad: #e5484d;
+}
+
 .login-container {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: radial-gradient(circle at top, #0b3c6f, #061a33);
+  background: var(--bg);
   padding: 20px;
   box-sizing: border-box;
 }
 
 .login-card {
   width: 100%;
-  max-width: 380px;
-  padding: 32px 28px;
-  border-radius: 16px;
-  background: #ffffff;
+  max-width: 400px;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 20px;
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 4px 20px rgba(20, 61, 107, 0.1);
 }
 
+/* หัวสีกรมท่า */
 .login-header {
+  background: var(--navy);
+  color: #fff;
   text-align: center;
-  margin-bottom: 24px;
+  padding: 28px 24px 26px;
 
   .login-icon {
-    font-size: 40px;
-    width: 40px;
-    height: 40px;
-    color: #0d2b52;
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.16);
+    display: grid;
+    place-items: center;
+
+    mat-icon {
+      font-size: 28px;
+      width: 28px;
+      height: 28px;
+    }
   }
 
   h2 {
-    margin: 8px 0 0;
-    font-size: 20px;
-    color: #0d2b52;
+    margin: 0;
+    font-size: 22px;
+    font-weight: 600;
   }
 
   .subtitle {
     margin: 4px 0 0;
-    font-size: 13px;
-    color: #6b7280;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.85);
   }
 }
 
@@ -44,6 +72,21 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  padding: 28px 28px 24px;
+
+  // สีของ mat-form-field ให้เข้ากับธีม
+  --mdc-outlined-text-field-outline-color: #b9c4d3;
+  --mdc-outlined-text-field-hover-outline-color: var(--navy);
+  --mdc-outlined-text-field-focus-outline-color: var(--navy);
+  --mdc-outlined-text-field-label-text-color: var(--muted);
+  --mdc-outlined-text-field-focus-label-text-color: var(--navy);
+  --mdc-outlined-text-field-input-text-color: #1a1a1a;
+  --mdc-outlined-text-field-caret-color: var(--navy);
+}
+
+::ng-deep .login-form .mat-mdc-form-field-icon-suffix,
+::ng-deep .login-form .mat-mdc-form-field-icon-suffix .mat-icon {
+  color: var(--muted);
 }
 
 .full-width {
@@ -51,24 +94,58 @@
 }
 
 .error-text {
-  color: #d32f2f;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 8px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #fdecec;
+  color: var(--bad);
   font-size: 13px;
-  margin: 4px 0 12px;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
 }
 
 .login-button {
-  height: 44px;
-  margin-top: 8px;
+  height: 48px;
+  margin-top: 4px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: var(--gold) !important;
+  color: #fff !important;
+  --mdc-circular-progress-active-indicator-color: #ffffff;
+
+  &:hover:not(:disabled) {
+    background: var(--gold-dark) !important;
+  }
+
+  &:disabled {
+    background: #e6dcc9 !important;
+    color: #fff !important;
+  }
 
   .btn-spinner {
     display: inline-block;
+    margin-right: 8px;
   }
 }
 
 .back-button {
   margin-top: 8px;
-  color: #6b7280;
+  height: 44px;
+  border-radius: 10px;
+  color: var(--navy);
+
+  mat-icon {
+    margin-right: 4px;
+  }
 }

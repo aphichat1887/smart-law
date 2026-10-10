@@ -1,121 +1,198 @@
-/* toolbar */
-.toolbar {
-  background: linear-gradient(90deg, #0d2b52, #133c73);
-  color: white;
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 500;
-}
-
-.spacer {
-  flex: 1;
+:host {
+  --navy: #143d6b;
+  --navy-dark: #0f3057;
+  --gold: #d4a259;
+  --gold-dark: #c08f45;
+  --bg: #f5f6fa;
+  --surface: #ffffff;
+  --text: #12355b;
+  --muted: #6b7a90;
+  --line: #e3e8ef;
+  --good: #2e9d5b;
+  --warn: #f59e0b;
+  --bad: #e5484d;
 }
 
 /* page */
 .page {
-  height: calc(100vh - 64px);
-  background: radial-gradient(circle at top, #0b3c6f, #061a33);
+  min-height: calc(100vh - 64px);
+  padding: 28px 16px 48px;
+  box-sizing: border-box;
+  background: var(--bg);
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: 20px;
-  box-sizing: border-box;
+  align-items: flex-start;
 }
 
 /* card */
 .result-card {
-  width: 80%;
-  max-width: 950px;
-  max-height: 100%;
-  background: #2f3f55;
-  border-radius: 18px;
-  padding: 30px;
-  color: white;
+  width: 100%;
+  max-width: 1100px;
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 20px;
+  padding: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+  box-shadow: 0 4px 20px rgba(20, 61, 107, 0.08);
+}
+
+.hero {
+  position: relative;
+  background: var(--navy);
+  color: #fff;
+  text-align: center;
+  padding: 28px 24px 30px;
+}
+
+.back-btn {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  color: #fff;
+  border-color: #fff;
+  background: #fff;
+
+
+  mat-icon {
+    margin-right: 4px;
+  }
+}
+
+.hero-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  display: grid;
+  place-items: center;
+
+  mat-icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+  }
+}
+
+.title {
+  margin: 0 0 10px;
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.hero-sub {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.metric-pill {
+  padding: 4px 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.star {
+  color: var(--gold);
+}
+
+.best-text {
+  font-size: 13px;
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.body {
+  padding: 24px 28px 28px;
+}
+
+/* stat cards */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.stat {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px 16px;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  gap: 4px;
 }
 
-/* title */
-.title {
-  margin-bottom: 5px;
-  font-weight: 500;
-  flex-shrink: 0;
+.stat-label {
+  font-size: 13px;
+  color: var(--muted);
 }
 
-.subtitle {
-  font-size: 14px;
-  opacity: 0.85;
-  margin-bottom: 20px;
-  flex-shrink: 0;
+.stat-value {
+  font-size: 22px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+
+  small {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+  }
 }
 
 /* table */
 .table-wrapper {
-  background: white;
-  border-radius: 12px;
-  padding: 15px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
   overflow: auto;
-  flex: 1 1 auto;
-  min-height: 0; /* จำเป็นสำหรับ flex child ที่ต้อง scroll ได้จริง */
+  max-height: 60vh;
 }
 
 .result-table {
   width: 100%;
   border-collapse: collapse;
-  color: #333;
-  font-size: 13px;
+  font-size: 14px;
+
+  th,
+  td {
+    padding: 12px 14px;
+    text-align: center;
+    border-bottom: 1px solid var(--line);
+    vertical-align: middle;
+  }
+
+  th {
+    background: var(--navy);
+    color: #fff;
+    font-weight: 500;
+    font-size: 13px;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+
+  tbody tr:nth-child(even) td {
+    background: #fafbfd;
+  }
+
+  tbody tr:hover td {
+    background: #fdf8ef;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
 }
 
-.result-table th,
-.result-table td {
-  border: 1px solid #999;
-  padding: 8px;
-  text-align: center;
-}
-
-.result-table th {
-  background: #cfcfcf;
-  font-weight: 500;
-  position: sticky;
-  top: 0;
-  z-index: 1;
-}
-
-/* bottom action */
-.action-bottom {
-  margin-top: 25px;
-  display: flex;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.action-bottom button {
-  border-radius: 12px;
-  padding: 8px 30px;
-}
-
-/* เพิ่มใหม่: สถานะไม่มีผล, ตัวนับ, ไอคอนถูก/ผิด, chip ที่ตรงกับคำตอบ */
-.count-text {
-  opacity: 0.75;
-  font-size: 13px;
-  margin-left: 8px;
-}
-
-.icon-correct {
-  color: #4caf50;
-}
-
-.icon-partial {
-  color: #ff9800;
-}
-
-.icon-wrong {
-  color: #f44336;
+.question-cell {
+  text-align: left !important;
+  min-width: 240px;
 }
 
 .result-cell {
@@ -125,12 +202,24 @@
 .score-text {
   display: block;
   font-size: 11px;
-  opacity: 0.75;
+  color: var(--muted);
   margin-top: 2px;
 }
 
+.icon-correct {
+  color: var(--good);
+}
+
+.icon-partial {
+  color: var(--warn);
+}
+
+.icon-wrong {
+  color: var(--bad);
+}
+
 ::ng-deep .match-chip {
-  background: #2e7d32 !important;
+  background: var(--good) !important;
 }
 
 ::ng-deep .match-chip .mdc-evolution-chip__text-label {
@@ -138,56 +227,54 @@
   font-weight: 600;
 }
 
-/* ปุ่มย้อนกลับ / สลับ metric / ใช้โมเดลนี้ */
-.top-actions {
-  margin-bottom: 12px;
+/* empty state */
+.empty {
+  text-align: center;
+  padding: 32px 0 12px;
+  color: var(--muted);
+
+  >mat-icon {
+    font-size: 44px;
+    width: 44px;
+    height: 44px;
+    color: #b9c4d3;
+  }
+
+  p {
+    margin: 8px 0 20px;
+  }
 }
 
-.top-actions button,
-.metric-switch button {
-  color: white;
-  border-color: rgba(255, 255, 255, 0.4);
+.primary-btn {
+  height: 46px;
+  padding: 0 28px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  background: var(--gold) !important;
+  color: #fff !important;
+
+  &:hover {
+    background: var(--gold-dark) !important;
+  }
+
+  mat-icon {
+    margin-right: 6px;
+  }
 }
 
-.metric-switch {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin: 8px 0 14px;
-}
+/* mobile */
+@media (max-width: 720px) {
+  .body {
+    padding: 16px;
+  }
 
-.metric-switch button.active {
-  background: #4fc3f7;
-  color: #0d2b52;
-  border-color: #4fc3f7;
-}
+  .stat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
-.apply-row {
-  margin: 4px 0 18px;
-}
-
-.apply-row button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.btn-spinner {
-  display: inline-block;
-}
-
-/* ไฮไลท์ metric ที่แนะนำ */
-.metric-switch .star {
-  color: #ffd54f;
-  margin-right: 4px;
-}
-
-.metric-switch button.active .star {
-  color: #b8860b;
-}
-
-.recommend-note {
-  margin: -4px 0 12px;
-  font-size: 13px;
-  color: #a5d6a7;
+  .back-btn {
+    position: static;
+    margin-bottom: 12px;
+  }
 }

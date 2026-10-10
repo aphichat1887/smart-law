@@ -1,21 +1,46 @@
 <app-header></app-header>
 
 <div class="container">
-    <mat-card class="chat-box">
-        <p class="intro" *ngIf="!answer && !loading">
-            ยินดีต้อนรับสู่ Smart Law ระบบผู้ช่วยทางกฎหมายอัจฉริยะ
-        </p>
 
-        <div *ngIf="loading" class="loading">
+    <!-- หัวสีกรมท่า + ช่องถามคำถาม -->
+    <section class="hero">
+        <div class="hero-icon"><mat-icon>balance</mat-icon></div>
+        <h1 class="hero-title">มีคำถามเกี่ยวกับกฎหมายไทย?</h1>
+        <p class="hero-sub">สอบถามข้อกฎหมาย ค้นหามาตรา และทำความเข้าใจสิทธิของคุณได้ง่าย ๆ ด้วย AI</p>
+
+        <div class="search-bar" [class.disabled]="loading">
+            <mat-icon class="search-icon">search</mat-icon>
+            <input #qInput type="text" class="search-input" placeholder="พิมพ์คำถามเกี่ยวกับกฎหมายที่นี่..."
+                [(ngModel)]="question" (keyup.enter)="ask()" [disabled]="loading" />
+            <button type="button" class="send-btn" aria-label="ส่งคำถาม" (click)="ask()" [disabled]="loading">
+                <mat-icon>arrow_upward</mat-icon>
+            </button>
+        </div>
+
+        <p class="hero-example">
+            ตัวอย่าง:
+            <a class="example-link"
+                (click)="question = 'ผู้กู้ไม่ชำระหนี้ตามสัญญากู้ยืม เจ้าหนี้ทำอย่างไรได้บ้าง?'; qInput.focus()">
+                ผู้กู้ไม่ชำระหนี้ตามสัญญากู้ยืม เจ้าหนี้ทำอย่างไรได้บ้าง?
+            </a>
+        </p>
+    </section>
+
+    <div class="content">
+
+        <!-- กำลังค้นหา -->
+        <div *ngIf="loading" class="card loading">
             <mat-spinner diameter="28"></mat-spinner>
             <span>กำลังค้นหาคำตอบ...</span>
         </div>
 
-        <div *ngIf="answer && !loading" class="answer-box">
-            <h3>คำตอบ</h3>
+        <!-- คำตอบ -->
+        <div *ngIf="answer && !loading" class="card answer-box">
+            <h3 class="card-title"><mat-icon>gavel</mat-icon> คำตอบ</h3>
             <p class="answer-text">{{ answer }}</p>
 
-            <div *ngIf="sources.length" class="sources">
+            <!-- ถ้าระบบตอบว่า "ไม่พบข้อมูล" จะไม่แสดงมาตราอ้างอิง -->
+            <div *ngIf="sources.length && !answer.includes('ไม่พบข้อมูล')" class="sources">
                 <h4>อ้างอิง</h4>
                 <mat-chip-listbox>
                     <mat-chip-option *ngFor="let s of sources" [selectable]="false">
@@ -25,17 +50,13 @@
             </div>
         </div>
 
-        <p *ngIf="error" class="error-text">{{ error }}</p>
-    </mat-card>
+        <p *ngIf="error" class="error-text">
+            <mat-icon>error_outline</mat-icon> {{ error }}
+        </p>
 
-    <div class="input-area">
-        <mat-form-field appearance="outline" class="input-field">
-            <input matInput placeholder="พิมพ์คำถามทางกฎหมายที่นี่" [(ngModel)]="question" (keyup.enter)="ask()"
-                [disabled]="loading" />
-        </mat-form-field>
-
-        <button mat-fab color="primary" (click)="ask()" [disabled]="loading">
-            <mat-icon>send</mat-icon>
-        </button>
+        <!-- ข้อความต้อนรับ (แสดงตอนยังไม่ได้ถาม) -->
+        <p class="intro" *ngIf="!answer && !loading">
+            ยินดีต้อนรับสู่ Smart Law ระบบผู้ช่วยทางกฎหมายอัจฉริยะ
+        </p>
     </div>
 </div>

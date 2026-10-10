@@ -1,39 +1,119 @@
+:host {
+  --navy: #143d6b;
+  --navy-dark: #0f3057;
+  --gold: #d4a259;
+  --gold-dark: #c08f45;
+  --bg: #f5f6fa;
+  --surface: #ffffff;
+  --text: #12355b;
+  --muted: #6b7a90;
+  --line: #e3e8ef;
+  --bad: #e5484d;
+}
+
+/* page */
 .page {
   min-height: calc(100vh - 64px);
-  background: radial-gradient(circle at top, #0b3c6f, #061a33);
+  background: var(--bg);
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding: 40px 20px;
+  padding: 28px 16px 48px;
   box-sizing: border-box;
 }
 
+/* card */
 .admin-card {
   width: 100%;
-  max-width: 700px;
-  background: #2f3f55;
-  border-radius: 18px;
-  padding: 30px;
-  color: white;
+  max-width: 760px;
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 20px;
+  padding: 0;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(20, 61, 107, 0.08);
+}
+
+.hero {
+  background: var(--navy);
+  color: #fff;
+  text-align: center;
+  padding: 28px 24px 30px;
+}
+
+.hero-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  display: grid;
+  place-items: center;
+
+  mat-icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+  }
 }
 
 .title {
-  margin-bottom: 5px;
-  font-weight: 500;
+  margin: 0 0 8px;
+  font-size: 26px;
+  font-weight: 600;
 }
 
 .subtitle {
-  font-size: 14px;
-  opacity: 0.85;
-  margin-bottom: 24px;
+  margin: 0;
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.85);
 }
 
+.body {
+  padding: 8px 28px 28px;
+}
+
+/* sections */
+.section {
+  padding: 22px 0;
+  border-bottom: 1px solid var(--line);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 16px;
+  font-size: 17px;
+  font-weight: 600;
+
+  mat-icon {
+    color: var(--gold);
+  }
+}
+
+.count {
+  margin-left: 4px;
+  min-width: 24px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: #eef3f9;
+  color: var(--navy);
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* ฟอร์ม */
 .create-form {
   display: flex;
   gap: 12px;
   align-items: flex-start;
   flex-wrap: wrap;
-  margin-bottom: 28px;
 
   .email-field {
     flex: 1 1 220px;
@@ -43,89 +123,158 @@
     flex: 1 1 180px;
   }
 
-  button {
-    height: 56px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+  // สีของ mat-form-field ให้เข้ากับธีม
+  --mdc-outlined-text-field-outline-color: #b9c4d3;
+  --mdc-outlined-text-field-hover-outline-color: var(--navy);
+  --mdc-outlined-text-field-focus-outline-color: var(--navy);
+  --mdc-outlined-text-field-label-text-color: var(--muted);
+  --mdc-outlined-text-field-focus-label-text-color: var(--navy);
+  --mdc-outlined-text-field-input-text-color: #1a1a1a;
+  --mdc-outlined-text-field-caret-color: var(--navy);
+}
+
+.primary-btn {
+  height: 56px;
+  padding: 0 24px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  background: var(--gold) !important;
+  color: #fff !important;
+
+  &:hover:not(:disabled) {
+    background: var(--gold-dark) !important;
   }
-}
 
-::ng-deep .create-form .mat-mdc-text-field-wrapper {
-  background: #ffffff;
-  border-radius: 8px;
-}
+  &:disabled {
+    background: #e6dcc9 !important;
+    color: #fff !important;
+  }
 
-::ng-deep .create-form input {
-  color: #1a1a1a !important;
+  mat-icon {
+    margin-right: 6px;
+  }
 }
 
 .btn-spinner {
   display: inline-block;
+  margin-right: 8px;
 }
 
-.list-section {
-  h3 {
-    font-size: 15px;
-    opacity: 0.9;
-    margin-bottom: 12px;
-  }
-}
-
+/* รายการ admin */
 .status-row {
   display: flex;
   align-items: center;
   gap: 10px;
-  opacity: 0.85;
+  color: var(--muted);
   font-size: 14px;
   margin-bottom: 12px;
+}
+
+.empty {
+  margin: 0;
+  padding: 20px 0;
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
 }
 
 .admin-item {
   display: flex;
   align-items: center;
   gap: 12px;
-  background: #3a4b64;
-  border-radius: 10px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
   padding: 10px 14px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+
+  &:hover {
+    border-color: var(--gold);
+    box-shadow: 0 4px 12px rgba(20, 61, 107, 0.08);
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.avatar {
+  flex: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #eef3f9;
+  color: var(--navy);
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+
+  &.super {
+    background: #fbf1de;
+    color: #9a6a1c;
+  }
 }
 
 .admin-email {
   flex: 1;
+  min-width: 0;
   font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ชิปบทบาท */
+::ng-deep .admin-item .mat-mdc-standard-chip {
+  --mdc-chip-elevated-container-color: #eef3f9;
+  --mdc-chip-label-text-color: var(--navy);
+}
+
+::ng-deep .admin-item .mdc-evolution-chip__text-label {
+  color: var(--navy) !important;
+  font-weight: 600;
 }
 
 ::ng-deep .super-chip {
-  background: #b8860b !important;
+  background: var(--gold) !important;
 }
 
 ::ng-deep .super-chip .mdc-evolution-chip__text-label {
   color: #ffffff !important;
-  font-weight: 600;
 }
 
-/* ไอคอนลบ: แดงอ่อนให้เห็นชัดบนพื้นเข้ม */
-.admin-item button[mat-icon-button] {
-  --mdc-icon-button-icon-color: #ff8a80;
+/* ปุ่มลบ */
+.delete-btn {
+  --mdc-icon-button-icon-color: var(--bad);
 }
 
-::ng-deep .admin-item .mat-mdc-icon-button .mat-icon {
-  color: #ff8a80;
-}
-
-/* ชิป Admin ธรรมดา */
-::ng-deep .admin-item .mat-mdc-standard-chip {
-  --mdc-chip-elevated-container-color: #5a708f;
-  --mdc-chip-label-text-color: #ffffff;
-}
-
-::ng-deep .admin-item .mdc-evolution-chip__text-label {
-  color: #ffffff !important;
+::ng-deep .admin-item .delete-btn .mat-icon {
+  color: var(--bad);
 }
 
 /* วงกลมหมุน */
 .status-row,
 .admin-item {
-  --mdc-circular-progress-active-indicator-color: #4fc3f7;
+  --mdc-circular-progress-active-indicator-color: var(--navy);
+}
+
+.primary-btn {
+  --mdc-circular-progress-active-indicator-color: #ffffff;
+}
+
+/* มือถือ */
+@media (max-width: 640px) {
+  .body {
+    padding: 4px 16px 20px;
+  }
+
+  .primary-btn {
+    width: 100%;
+  }
+
+  .admin-item {
+    flex-wrap: wrap;
+  }
 }

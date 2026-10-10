@@ -2,53 +2,75 @@
 
 <div class="page">
     <mat-card class="admin-card">
-        <h2 class="title">จัดการแอดมิน</h2>
-        <p class="subtitle">เฉพาะ Super Admin เท่านั้นที่สร้าง/ลบ admin ธรรมดาได้</p>
 
-        <!-- ฟอร์มสร้าง admin ใหม่ -->
-        <div class="create-form">
-            <mat-form-field appearance="outline" class="email-field">
-                <mat-label>อีเมล admin ใหม่</mat-label>
-                <input matInput [(ngModel)]="newEmail" [disabled]="creating" autocomplete="off" />
-            </mat-form-field>
+        <!-- หัวการ์ดสีกรมท่า -->
+        <header class="hero">
+            <div class="hero-icon"><mat-icon>admin_panel_settings</mat-icon></div>
+            <h2 class="title">จัดการแอดมิน</h2>
+            <!-- <p class="subtitle">เฉพาะ Super Admin เท่านั้นที่สร้าง/ลบ admin ธรรมดาได้</p> -->
+        </header>
 
-            <mat-form-field appearance="outline" class="password-field">
-                <mat-label>รหัสผ่าน</mat-label>
-                <input matInput type="password" [(ngModel)]="newPassword" [disabled]="creating"
-                    autocomplete="new-password" />
-            </mat-form-field>
+        <div class="body">
 
-            <button mat-raised-button color="primary" [disabled]="creating" (click)="createAdmin()">
-                <mat-spinner *ngIf="creating" diameter="20" class="btn-spinner"></mat-spinner>
-                <mat-icon *ngIf="!creating">person_add</mat-icon>
-                <span *ngIf="!creating">สร้าง admin</span>
-            </button>
-        </div>
+            <!-- ฟอร์มสร้าง admin ใหม่ -->
+            <section class="section">
+                <h3 class="section-title"><mat-icon>person_add</mat-icon> เพิ่ม admin ใหม่</h3>
 
-        <!-- รายชื่อ admin ทั้งหมด -->
-        <div class="list-section">
-            <h3>รายชื่อ admin ทั้งหมด</h3>
+                <div class="create-form">
+                    <mat-form-field appearance="outline" class="email-field">
+                        <mat-label>อีเมล admin ใหม่</mat-label>
+                        <input matInput [(ngModel)]="newEmail" [disabled]="creating" autocomplete="off" />
+                    </mat-form-field>
 
-            <div *ngIf="loadingList" class="status-row">
-                <mat-spinner diameter="22"></mat-spinner>
-                <span>กำลังโหลด...</span>
-            </div>
+                    <mat-form-field appearance="outline" class="password-field">
+                        <mat-label>รหัสผ่าน</mat-label>
+                        <input matInput type="password" [(ngModel)]="newPassword" [disabled]="creating"
+                            autocomplete="new-password" />
+                    </mat-form-field>
 
-            <div class="admin-item" *ngFor="let a of admins">
-                <span class="admin-email">{{ a.email }}</span>
+                    <button mat-flat-button class="primary-btn" [disabled]="creating" (click)="createAdmin()">
+                        <mat-spinner *ngIf="creating" diameter="20" class="btn-spinner"></mat-spinner>
+                        <mat-icon *ngIf="!creating">person_add</mat-icon>
+                        <span *ngIf="!creating">สร้าง admin</span>
+                        <span *ngIf="creating">กำลังสร้าง...</span>
+                    </button>
+                </div>
+            </section>
 
-                <mat-chip-listbox>
-                    <mat-chip-option [selectable]="false" [class.super-chip]="a.role === 'super_admin'">
-                        {{ a.role === 'super_admin' ? 'Super Admin' : 'Admin' }}
-                    </mat-chip-option>
-                </mat-chip-listbox>
+            <!-- รายชื่อ admin ทั้งหมด -->
+            <section class="section list-section">
+                <h3 class="section-title">
+                    <mat-icon>groups</mat-icon> รายชื่อ admin ทั้งหมด
+                    <span class="count" *ngIf="!loadingList">{{ admins.length }}</span>
+                </h3>
 
-                <button *ngIf="a.role !== 'super_admin'" mat-icon-button color="warn" matTooltip="ลบ admin นี้"
-                    [disabled]="deletingEmail === a.email" (click)="deleteAdmin(a.email)">
-                    <mat-spinner *ngIf="deletingEmail === a.email" diameter="18"></mat-spinner>
-                    <mat-icon *ngIf="deletingEmail !== a.email">delete</mat-icon>
-                </button>
-            </div>
+                <div *ngIf="loadingList" class="status-row">
+                    <mat-spinner diameter="22"></mat-spinner>
+                    <span>กำลังโหลด...</span>
+                </div>
+
+                <p class="empty" *ngIf="!loadingList && admins.length === 0">ยังไม่มี admin</p>
+
+                <div class="admin-item" *ngFor="let a of admins">
+                    <span class="avatar" [class.super]="a.role === 'super_admin'">
+                        {{ (a.email || '?').charAt(0).toUpperCase() }}
+                    </span>
+
+                    <span class="admin-email">{{ a.email }}</span>
+
+                    <mat-chip-listbox>
+                        <mat-chip-option [selectable]="false" [class.super-chip]="a.role === 'super_admin'">
+                            {{ a.role === 'super_admin' ? 'Super Admin' : 'Admin' }}
+                        </mat-chip-option>
+                    </mat-chip-listbox>
+
+                    <button *ngIf="a.role !== 'super_admin'" mat-icon-button class="delete-btn"
+                        matTooltip="ลบ admin นี้" [disabled]="deletingEmail === a.email" (click)="deleteAdmin(a.email)">
+                        <mat-spinner *ngIf="deletingEmail === a.email" diameter="18"></mat-spinner>
+                        <mat-icon *ngIf="deletingEmail !== a.email">delete</mat-icon>
+                    </button>
+                </div>
+            </section>
         </div>
     </mat-card>
 </div>

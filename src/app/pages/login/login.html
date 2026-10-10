@@ -1,10 +1,12 @@
 <div class="login-container">
     <mat-card class="login-card">
-        <div class="login-header">
-            <mat-icon class="login-icon">admin_panel_settings</mat-icon>
+
+        <!-- หัวการ์ดสีกรมท่า -->
+        <header class="login-header">
+            <div class="login-icon"><mat-icon>admin_panel_settings</mat-icon></div>
             <h2>เข้าสู่ระบบผู้ดูแล</h2>
             <p class="subtitle">Smart Law Admin</p>
-        </div>
+        </header>
 
         <form (ngSubmit)="login()" class="login-form">
             <mat-form-field appearance="outline" class="full-width">
@@ -26,12 +28,14 @@
                 </button>
             </mat-form-field>
 
-            <p *ngIf="error" class="error-text">{{ error }}</p>
+            <p *ngIf="error" class="error-text">
+                <mat-icon>error_outline</mat-icon> {{ error }}
+            </p>
 
-            <button mat-raised-button color="primary" type="submit" class="login-button full-width"
-                [disabled]="loading">
+            <button mat-flat-button type="submit" class="login-button full-width" [disabled]="loading">
                 <mat-spinner *ngIf="loading" diameter="20" class="btn-spinner"></mat-spinner>
                 <span *ngIf="!loading">เข้าสู่ระบบ</span>
+                <span *ngIf="loading">กำลังเข้าสู่ระบบ...</span>
             </button>
 
             <button mat-button type="button" class="back-button full-width" (click)="goBack()">

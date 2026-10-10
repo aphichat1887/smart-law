@@ -2,100 +2,101 @@
 
 <div class="page">
     <mat-card class="result-card">
-        <div class="top-actions">
-            <button mat-stroked-button (click)="goBack()">
+
+        <!-- หัวการ์ดสีกรมท่า -->
+        <header class="hero">
+            <button mat-stroked-button class="back-btn" (click)="goBack()">
                 <mat-icon>arrow_back</mat-icon>
                 ย้อนกลับ
             </button>
+            <div class="hero-icon"><mat-icon>fact_check</mat-icon></div>
+            <h2 class="title">ผลการทดสอบรายข้อ</h2>
+            <p class="hero-sub" *ngIf="selected">
+                <span class="metric-pill">{{ labelOf(selected) }}</span>
+                <mat-icon *ngIf="isBest(selected)" class="star">star</mat-icon>
+                <span *ngIf="isBest(selected)" class="best-text">แนะนำ</span>
+            </p>
+        </header>
+
+        <div class="body">
+            <ng-container *ngIf="selected; else noResult">
+
+                <!-- สรุปคะแนน -->
+                <div class="stat-grid">
+                    <div class="stat">
+                        <span class="stat-label">Recall@{{ selected.k }}</span>
+                        <span class="stat-value">{{ formatMetric(selected.recall_at_k) }}</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Hit@{{ selected.k }}</span>
+                        <span class="stat-value">{{ formatMetric(selected.hit_at_k) }}</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">MRR</span>
+                        <span class="stat-value">{{ formatMetric(selected.mrr) }}</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">ถูกต้อง</span>
+                        <span class="stat-value">{{ selected.correct_count }}<small> / {{ selected.total }}
+                                ข้อ</small></span>
+                    </div>
+                </div>
+
+                <!-- ตารางรายข้อ -->
+                <div class="table-wrapper">
+                    <table class="result-table">
+                        <thead>
+                            <tr>
+                                <th>คำถาม</th>
+                                <th>มาตราที่ถูกต้อง</th>
+                                <th>มาตราที่ระบบค้นเจอ (top-{{ selected.k }})</th>
+                                <th>Recall</th>
+                                <th>Hit</th>
+                                <th>Reciprocal Rank</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let row of selected.results">
+                                <td class="question-cell">{{ row.question }}</td>
+                                <td>{{ row.actual_article }}</td>
+                                <td>
+                                    <mat-chip-listbox>
+                                        <mat-chip-option *ngFor="let a of row.predicted_articles" [selectable]="false"
+                                            [class.match-chip]="row.matched_articles.includes(a)">
+                                            {{ a }}
+                                        </mat-chip-option>
+                                    </mat-chip-listbox>
+                                </td>
+                                <td class="result-cell">
+                                    <mat-icon *ngIf="row.recall === 1" class="icon-correct">check_circle</mat-icon>
+                                    <mat-icon *ngIf="row.recall > 0 && row.recall < 1"
+                                        class="icon-partial">adjust</mat-icon>
+                                    <mat-icon *ngIf="row.recall === 0" class="icon-wrong">cancel</mat-icon>
+                                    <span class="score-text">{{ (row.recall * 100).toFixed(0) }}%</span>
+                                </td>
+                                <td class="result-cell">
+                                    <mat-icon *ngIf="row.hit" class="icon-correct">check_circle</mat-icon>
+                                    <mat-icon *ngIf="!row.hit" class="icon-wrong">cancel</mat-icon>
+                                </td>
+                                <td class="result-cell">
+                                    {{ row.reciprocal_rank.toFixed(2) }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </ng-container>
+
+            <ng-template #noResult>
+                <div class="empty">
+                    <mat-icon>inbox</mat-icon>
+                    <p>ยังไม่มีผลการทดสอบ กรุณาไปที่หน้า "ทดสอบ" แล้วอัปโหลดไฟล์ทดสอบก่อน</p>
+                    <button mat-flat-button class="primary-btn" (click)="goToTest()">
+                        <mat-icon>quiz</mat-icon>
+                        ไปหน้าทดสอบ
+                    </button>
+                </div>
+            </ng-template>
         </div>
-
-        <h2 class="title">ผลการทดสอบ</h2>
-
-        <ng-container *ngIf="selected; else noResult">
-
-            <!-- สลับดูผลของแต่ละ metric (แสดงเมื่อทดสอบหลายอัน) -->
-            <div class="metric-switch" *ngIf="allResults.length > 1">
-                <button mat-stroked-button *ngFor="let r of allResults" [class.active]="r === selected"
-                    (click)="select(r)">
-                    <mat-icon *ngIf="isBest(r)" class="star">star</mat-icon>
-                    {{ labelOf(r) }}
-                </button>
-            </div>
-            <p class="recommend-note" *ngIf="recommendText">{{ recommendText }}</p>
-
-            <p class="subtitle">
-                <strong>{{ labelOf(selected) }}</strong> &nbsp;|&nbsp;
-                Recall@{{ selected.k }} ที่ได้ {{ formatMetric(selected.recall_at_k) }}
-                &nbsp;|&nbsp; Hit@{{ selected.k }} ที่ได้ {{ formatMetric(selected.hit_at_k) }}
-                &nbsp;|&nbsp; MRR ที่ได้ {{ formatMetric(selected.mrr) }}
-                <span class="count-text">(ถูกต้อง {{ selected.correct_count }} จาก {{ selected.total }} ข้อ)</span>
-            </p>
-
-            <!-- ใช้โมเดลนี้เลย -->
-            <div class="apply-row">
-                <button mat-raised-button color="primary" [disabled]="applying || isCurrent" (click)="applySelected()">
-                    <mat-spinner *ngIf="applying" diameter="20" class="btn-spinner"></mat-spinner>
-                    <mat-icon *ngIf="!applying">check_circle</mat-icon>
-                    <span *ngIf="!applying && !isCurrent">ใช้ {{ labelOf(selected) }} กับระบบ</span>
-                    <span *ngIf="!applying && isCurrent">{{ labelOf(selected) }} คือค่าที่ระบบใช้อยู่แล้ว</span>
-                    <span *ngIf="applying">กำลังบันทึก...</span>
-                </button>
-            </div>
-
-            <div class="table-wrapper">
-                <table class="result-table">
-                    <thead>
-                        <tr>
-                            <th>คำถาม</th>
-                            <th>มาตราที่ถูกต้อง</th>
-                            <th>มาตราที่ระบบค้นเจอ (top-{{ selected.k }})</th>
-                            <th>Recall</th>
-                            <th>Hit</th>
-                            <th>Reciprocal Rank</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let row of selected.results">
-                            <td>{{ row.question }}</td>
-                            <td>{{ row.actual_article }}</td>
-                            <td>
-                                <mat-chip-listbox>
-                                    <mat-chip-option *ngFor="let a of row.predicted_articles" [selectable]="false"
-                                        [class.match-chip]="row.matched_articles.includes(a)">
-                                        {{ a }}
-                                    </mat-chip-option>
-                                </mat-chip-listbox>
-                            </td>
-                            <td class="result-cell">
-                                <mat-icon *ngIf="row.recall === 1" class="icon-correct">check_circle</mat-icon>
-                                <mat-icon *ngIf="row.recall > 0 && row.recall < 1"
-                                    class="icon-partial">adjust</mat-icon>
-                                <mat-icon *ngIf="row.recall === 0" class="icon-wrong">cancel</mat-icon>
-                                <span class="score-text">{{ (row.recall * 100).toFixed(0) }}%</span>
-                            </td>
-                            <td class="result-cell">
-                                <mat-icon *ngIf="row.hit" class="icon-correct">check_circle</mat-icon>
-                                <mat-icon *ngIf="!row.hit" class="icon-wrong">cancel</mat-icon>
-                            </td>
-                            <td class="result-cell">
-                                {{ row.reciprocal_rank.toFixed(2) }}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </ng-container>
-
-        <ng-template #noResult>
-            <p class="subtitle">
-                ยังไม่มีผลการทดสอบ กรุณาไปที่หน้า "ทดสอบ" แล้วอัปโหลดไฟล์ทดสอบก่อน
-            </p>
-            <div class="action-bottom">
-                <button mat-raised-button color="primary" (click)="goToTest()">
-                    <mat-icon>quiz</mat-icon>
-                    ไปหน้าทดสอบ
-                </button>
-            </div>
-        </ng-template>
     </mat-card>
 </div>

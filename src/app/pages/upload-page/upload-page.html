@@ -2,47 +2,73 @@
 
 <div class="page">
     <mat-card class="file-card">
-        <h2 class="title">File List</h2>
 
-        <div *ngIf="loadingList" class="status-row">
-            <mat-spinner diameter="24"></mat-spinner>
-            <span>กำลังโหลดรายชื่อไฟล์...</span>
-        </div>
+        <!-- หัวการ์ดสีกรมท่า -->
+        <header class="hero">
+            <div class="hero-icon"><mat-icon>folder_copy</mat-icon></div>
+            <h2 class="title">จัดการไฟล์กฎหมาย</h2>
+            <p class="subtitle">อัปโหลดไฟล์ PDF เพื่อให้ระบบนำมาตราไปใช้ค้นหาคำตอบ</p>
+        </header>
 
-        <p *ngIf="!loadingList && files.length === 0" class="empty-text">
-            ยังไม่มีไฟล์ที่อัปโหลด
-        </p>
+        <div class="body">
 
-        <!-- file item -->
-        <div class="file-item" *ngFor="let file of files">
-            <span class="file-name">
-                {{ file.filename }}
-                <span class="article-count">({{ file.article_count }} มาตรา)</span>
-            </span>
+            <!-- อัปโหลด -->
+            <section class="section">
+                <!-- ช่องเลือกไฟล์ที่ซ่อนไว้ ให้ปุ่ม Upload กดแล้วสั่งเปิดแทน -->
+                <input #fileInput type="file" accept="application/pdf" hidden (change)="onFileSelected($event)" />
 
-            <div class="actions">
-                <button mat-mini-fab color="primary" matTooltip="ดูตัวอย่าง PDF" (click)="previewFile(file.filename)">
-                    <mat-icon>visibility</mat-icon>
+                <button type="button" class="dropzone" [class.busy]="uploading" [disabled]="uploading"
+                    (click)="openFilePicker()">
+                    <mat-spinner *ngIf="uploading" diameter="32"></mat-spinner>
+                    <mat-icon *ngIf="!uploading">upload_file</mat-icon>
+                    <span class="drop-main" *ngIf="!uploading">คลิกเพื่ออัปโหลดไฟล์ PDF</span>
+                    <span class="drop-main" *ngIf="uploading">กำลังประมวลผล...</span>
+                    <span class="drop-sub" *ngIf="!uploading">รองรับเฉพาะไฟล์ .pdf</span>
+                    <span class="drop-sub" *ngIf="uploading">อาจใช้เวลาสักครู่ กรุณาอย่าปิดหน้านี้</span>
                 </button>
+            </section>
 
-                <button mat-mini-fab color="warn" matTooltip="ลบไฟล์นี้" [disabled]="deletingFilename === file.filename"
-                    (click)="deleteFile(file.filename)">
-                    <mat-spinner *ngIf="deletingFilename === file.filename" diameter="20"></mat-spinner>
-                    <mat-icon *ngIf="deletingFilename !== file.filename">delete</mat-icon>
-                </button>
-            </div>
-        </div>
+            <!-- รายการไฟล์ -->
+            <section class="section">
+                <h3 class="section-title">
+                    <mat-icon>description</mat-icon> ไฟล์ที่อัปโหลดแล้ว
+                    <span class="count" *ngIf="!loadingList">{{ files.length }}</span>
+                </h3>
 
-        <!-- ช่องเลือกไฟล์ที่ซ่อนไว้ ให้ปุ่ม Upload กดแล้วสั่งเปิดแทน -->
-        <input #fileInput type="file" accept="application/pdf" hidden (change)="onFileSelected($event)" />
+                <div *ngIf="loadingList" class="status-row">
+                    <mat-spinner diameter="24"></mat-spinner>
+                    <span>กำลังโหลดรายชื่อไฟล์...</span>
+                </div>
 
-        <div class="upload-area">
-            <button mat-raised-button color="primary" [disabled]="uploading" (click)="openFilePicker()">
-                <mat-spinner *ngIf="uploading" diameter="20" class="btn-spinner"></mat-spinner>
-                <mat-icon *ngIf="!uploading">upload</mat-icon>
-                <span *ngIf="!uploading">Upload</span>
-                <span *ngIf="uploading">กำลังประมวลผล...</span>
-            </button>
+                <p *ngIf="!loadingList && files.length === 0" class="empty-text">
+                    <mat-icon>inbox</mat-icon>
+                    ยังไม่มีไฟล์ที่อัปโหลด
+                </p>
+
+                <!-- file item -->
+                <div class="file-item" *ngFor="let file of files">
+                    <span class="file-icon"><mat-icon>picture_as_pdf</mat-icon></span>
+
+                    <div class="file-info">
+                        <span class="file-name">{{ file.filename }}</span>
+                        <span class="article-count">{{ file.article_count }} มาตรา</span>
+                    </div>
+
+                    <div class="actions">
+                        <button mat-stroked-button class="preview-btn" matTooltip="ดูตัวอย่าง PDF"
+                            (click)="previewFile(file.filename)">
+                            <mat-icon>visibility</mat-icon>
+                            ดูตัวอย่าง
+                        </button>
+
+                        <button mat-icon-button class="delete-btn" matTooltip="ลบไฟล์นี้"
+                            [disabled]="deletingFilename === file.filename" (click)="deleteFile(file.filename)">
+                            <mat-spinner *ngIf="deletingFilename === file.filename" diameter="20"></mat-spinner>
+                            <mat-icon *ngIf="deletingFilename !== file.filename">delete</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </section>
         </div>
     </mat-card>
 </div>
