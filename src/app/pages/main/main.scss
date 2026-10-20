@@ -248,3 +248,41 @@
     font-size: 22px;
   }
 }
+
+::ng-deep .sources mat-chip-option {
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+::ng-deep .sources mat-chip-option:hover {
+  background: #dfe9f5 !important;
+}
+
+::ng-deep .sources mat-chip-option.active {
+  background: var(--navy) !important;
+}
+
+::ng-deep .sources mat-chip-option.active .mdc-evolution-chip__text-label {
+  color: #fff !important;
+}
+
+.article-detail {
+  margin-top: 14px;
+  padding: 14px 16px;
+  border-left: 4px solid var(--gold);
+  background: #f8f9fc;
+  border-radius: 8px;
+
+  h5 {
+    margin: 0 0 6px;
+    font-size: 15px;
+    color: var(--navy);
+  }
+
+  p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.7;
+    white-space: normal;
+  }
+}

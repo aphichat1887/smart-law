@@ -38,9 +38,9 @@ export class Main implements OnInit {
   loading = false;
   error = '';
 
-  constructor(private searchService: SearchService) {}
+  constructor(private searchService: SearchService) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   ask(): void {
     const q = this.question.trim();
@@ -62,5 +62,11 @@ export class Main implements OnInit {
         this.loading = false;
       },
     });
+  }
+
+  selected: SourceItem | null = null;
+
+  select(s: SourceItem): void {
+    this.selected = this.selected === s ? null : s;
   }
 }

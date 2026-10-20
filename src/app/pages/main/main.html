@@ -41,12 +41,18 @@
 
             <!-- ถ้าระบบตอบว่า "ไม่พบข้อมูล" จะไม่แสดงมาตราอ้างอิง -->
             <div *ngIf="sources.length && !answer.includes('ไม่พบข้อมูล')" class="sources">
-                <h4>อ้างอิง</h4>
+                <h4>อ้างอิง (กดเพื่อดูเนื้อหามาตรา)</h4>
                 <mat-chip-listbox>
-                    <mat-chip-option *ngFor="let s of sources" [selectable]="false">
+                    <mat-chip-option *ngFor="let s of sources" [selectable]="false" [class.active]="selected === s"
+                        (click)="select(s)">
                         มาตรา {{ s.article }}
                     </mat-chip-option>
                 </mat-chip-listbox>
+
+                <div *ngIf="selected" class="article-detail">
+                    <h5>มาตรา {{ selected.article }}</h5>
+                    <p>{{ selected.text }}</p>
+                </div>
             </div>
         </div>
 
