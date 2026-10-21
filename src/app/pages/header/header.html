@@ -37,6 +37,10 @@
             <mat-icon>manage_accounts</mat-icon>
             <span>จัดการแอดมิน</span>
         </button>
+        <button mat-menu-item *ngIf="isLoggedIn" (click)="goToChangePassword()">
+            <mat-icon>lock_reset</mat-icon>
+            <span>เปลี่ยนรหัสผ่าน</span>
+        </button>
 
         <button mat-menu-item *ngIf="isLoggedIn" (click)="logout()">
             <mat-icon>logout</mat-icon>

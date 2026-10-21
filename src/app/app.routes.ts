@@ -8,6 +8,7 @@ import { TestPage } from './pages/test-page/test-page';
 import { ResultTestPage } from './pages/result-test-page/result-test-page';
 import { ManageAdmins } from './pages/manage-admins/manage-admins';
 import { adminGuard, superAdminGuard } from './guards/auth.guard';
+import { ChangePassword } from './pages/change-password/change-password';
  
 export const routes: Routes = [
   { path: '', component: Main },
@@ -16,4 +17,5 @@ export const routes: Routes = [
   { path: 'test', component: TestPage, canActivate: [adminGuard] },
   { path: 'result', component: ResultTestPage, canActivate: [adminGuard] },
   { path: 'manage-admins', component: ManageAdmins, canActivate: [superAdminGuard] },
+  { path: 'change-password', component: ChangePassword },
 ];

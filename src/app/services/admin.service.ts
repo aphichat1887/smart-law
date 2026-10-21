@@ -41,4 +41,12 @@ export class AdminService {
       { body: { requester_email: this.requesterEmail } }
     );
   }
+
+  changePassword(email: string, oldPassword: string, newPassword: string) {
+    return this.http.post<{ success: boolean }>(`${this.apiUrl}/admin/change-password`, {
+      email,
+      old_password: oldPassword,
+      new_password: newPassword,
+    });
+  }
 }

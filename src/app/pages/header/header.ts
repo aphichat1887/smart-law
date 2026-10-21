@@ -57,6 +57,10 @@ export class Header implements OnInit {
     this.router.navigate(['/manage-admins']);
   }
 
+  goToChangePassword(): void {
+    this.router.navigate(['/change-password']);
+  }
+
   // Logout
   logout(): void {
     localStorage.removeItem('isAdminLoggedIn');
