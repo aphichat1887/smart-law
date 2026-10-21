@@ -44,9 +44,14 @@ export class AdminService {
 
   changePassword(email: string, oldPassword: string, newPassword: string) {
     return this.http.post<{ success: boolean }>(`${this.apiUrl}/admin/change-password`, {
-      email,
-      old_password: oldPassword,
-      new_password: newPassword,
+      email, old_password: oldPassword, new_password: newPassword,
     });
   }
+
+  resetPassword(requesterEmail: string, targetEmail: string, newPassword: string) {
+    return this.http.post<{ success: boolean }>(`${this.apiUrl}/admin/reset-password`, {
+      requester_email: requesterEmail, target_email: targetEmail, new_password: newPassword,
+    });
+  }
+
 }
